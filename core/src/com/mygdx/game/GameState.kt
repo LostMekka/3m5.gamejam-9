@@ -36,6 +36,7 @@ class GameState(
     fun calculateFrame(delta: Float) {
         calculateFactoryFrame(delta)
         calculateCombatFrame(delta)
+        calculateMiningFrame(delta)
     }
 
     private fun calculateFactoryFrame(delta: Float) {
@@ -62,7 +63,7 @@ class GameState(
     }
 
     private fun calculateMiningFrame(delta: Float) {
-        if (delta>lastFightUpdate+mining_round_length){
+        if (delta>lastFightUpdate+mining_round_length&&doorIsOpen){
             lastMiningUpdate=delta
             this.resourceInventory.triangles+=minerMinionData.minionCountOutside.toInt()
 
