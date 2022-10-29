@@ -44,7 +44,7 @@ object AssetDescriptors {
     // static init
     init {
         ALL.addAll(
-            FONT,
+            // FONT,
             TEST_SOUND,
         )
     }
