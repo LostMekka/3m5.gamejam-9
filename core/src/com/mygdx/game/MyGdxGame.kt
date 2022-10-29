@@ -19,11 +19,22 @@ class ExampleScreen : KtxScreen {
     val batch = SpriteBatch().apply {
         color = Color.WHITE
     }
+    var gameState = GameState()
 
     override fun render(delta: Float) {
+        calculateFactory()
+        calculateCombat()
         batch.use {
             font.draw(it, "Hello Kotlin!", 100f, 100f)
         }
+    }
+
+    private fun calculateFactory() {
+        // TODO
+    }
+
+    private fun calculateCombat() {
+        // TODO
     }
 
     override fun dispose() {
