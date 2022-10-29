@@ -15,6 +15,6 @@ class MyGdxGame : KtxGame<Screen>() {
     override fun create() {
         addScreen(GameScreen())
         addScreen(SplashScreen(this))
-        setScreen<SplashScreen>()
+        setScreen<GameScreen>()
     }
 }
