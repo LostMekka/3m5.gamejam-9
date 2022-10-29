@@ -23,7 +23,10 @@ class GameState(
 
     var bossLevel: Int = 1,
     var bossHp: Int = 1000,
+
 ) {
+    var lastFightUpdate=0
+    var fight:Boss_Fight= Boss_Fight(this)
     fun calculateFrame(delta: Float) {
         calculateFactoryFrame(delta)
         calculateCombatFrame(delta)
