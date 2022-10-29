@@ -3,7 +3,7 @@ package com.mygdx.game
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.assets.AssetManager
 import com.mygdx.game.assets.AssetDescriptors
-import com.mygdx.game.common.Soundcontroller
+import com.mygdx.game.common.SoundController
 import com.mygdx.game.screens.GameScreen
 import com.mygdx.game.screens.SplashScreen
 import ktx.app.KtxGame
@@ -22,7 +22,7 @@ class MyGdxGame : KtxGame<Screen>() {
         setScreen<GameScreen>()
 
         // just for testing, don't be scared!
-        Soundcontroller(assetManager).playTestSound()
+        SoundController(assetManager).playTestSound()
 
     }
 

@@ -4,9 +4,9 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Sound
 import com.mygdx.game.assets.AssetDescriptors
 
-class Soundcontroller() {
+class SoundController() {
 
-    private var assetManager: AssetManager = TODO()
+    private lateinit var assetManager: AssetManager
 
     private lateinit var testSound: Sound
 

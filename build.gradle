@@ -57,6 +57,10 @@ project(":desktop") {
         api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+        // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-freetype
+        implementation("com.badlogicgames.gdx:gdx-freetype:0.9.9")
+
     }
 }
 
