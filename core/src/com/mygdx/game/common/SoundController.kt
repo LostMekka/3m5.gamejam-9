@@ -4,16 +4,15 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Sound
 import com.mygdx.game.assets.AssetDescriptors
 
-class SoundController() {
-
-    private lateinit var assetManager: AssetManager
+class SoundController(
+    private val assetManager: AssetManager
+) {
 
     private lateinit var testSound: Sound
 
     private val volume = 1f
 
-    constructor(assetManager: AssetManager) : this() {
-        this.assetManager = assetManager
+    init {
         init()
     }
 
