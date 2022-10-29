@@ -1,5 +1,7 @@
 package com.mygdx.game.screens
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -25,6 +27,9 @@ class GameScreen : KtxScreen {
     override fun render(delta: Float) {
         ui.stage.act()
         gameState.calculateFrame(delta)
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
+
         ui.update()
 
         batch.use {
