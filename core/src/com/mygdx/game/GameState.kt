@@ -44,8 +44,9 @@ class GameState(
 
     private fun calculateCombatFrame(delta: Float) {
         if (delta>lastFightUpdate+round_length){
-            lastFightUpdate=delta;
-            fight.round();
+            lastFightUpdate=delta
+            fight.round()
+
         }
     }
 

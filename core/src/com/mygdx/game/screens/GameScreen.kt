@@ -16,7 +16,9 @@ class GameScreen : KtxScreen {
     val batch = SpriteBatch().apply {
         color = Color.WHITE
     }
+
     var gameState = GameState()
+
 
     override fun render(delta: Float) {
         gameState.calculateFrame(delta)
