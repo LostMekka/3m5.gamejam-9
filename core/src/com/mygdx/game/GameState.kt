@@ -1,5 +1,6 @@
 package com.mygdx.game
 
+import com.mygdx.game.common.soundController
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -75,7 +76,7 @@ class GameState(
     }
 
     fun onRepairClicked() {
-        // TODO
+        soundController.playRepairSound()
     }
 
     fun canUpgradeFactory(minionType: MinionType): Boolean {

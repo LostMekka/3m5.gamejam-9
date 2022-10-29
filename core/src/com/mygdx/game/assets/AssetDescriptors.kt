@@ -20,6 +20,7 @@ object AssetDescriptors {
     // repair
     // upgrade
     // collect ressources (3x)
+    val REPAIR_SOUND : AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
     // minion sounds (3x)
     // boss sounds
     // hits

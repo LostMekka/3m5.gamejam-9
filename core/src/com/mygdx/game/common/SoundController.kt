@@ -9,6 +9,7 @@ val soundController by lazy { SoundController() }
 
 class SoundController {
     private val testSound: Sound = assetManager.get(AssetDescriptors.TEST_SOUND)
+    private val repairSound: Sound = assetManager.get(AssetDescriptors.REPAIR_SOUND)
 
     private val volume = 1f
 
@@ -17,5 +18,9 @@ class SoundController {
 
     fun playTestSound() {
         testSound.play(volume)
+    }
+
+    fun playRepairSound() {
+        repairSound.play(volume)
     }
 }
