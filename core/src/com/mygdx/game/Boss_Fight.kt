@@ -56,8 +56,8 @@ class Boss_Fight(val state:GameState) {
     }
 
     fun giveLoot(){
-        state.resourceCircle+=state.bossLevel
-        state.resourceSquare+=(state.bossLevel/10)
+        state.resourceInventory.circles+=state.bossLevel
+        state.resourceInventory.squares+=(state.bossLevel/10)
 
     }
 
