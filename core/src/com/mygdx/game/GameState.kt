@@ -22,6 +22,8 @@ class GameState(
     val round_length=1
 
 
+    private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
+
     operator fun get(minionType: MinionType) = when (minionType) {
         MinionType.Tank -> tankMinionData
         MinionType.Archer -> archerMinionData
@@ -65,17 +67,25 @@ class GameState(
         // TODO
     }
 
+    fun canUpgradeFactory(minionType: MinionType): Boolean {
+        return getUpgradeCost(minionType) in resourceInventory
+    }
+
     fun onUpgradeFactoryClicked(minionType: MinionType) {
-        // TODO
+        if (!canUpgradeFactory(minionType)) return
+        resourceInventory -= getUpgradeCost(minionType)
+        this[minionType].factoryLevel++
     }
 
     fun onToggleDoorClicked() {
-        // TODO
+        doorIsOpen = !doorIsOpen
     }
 
     fun getUpgradeCost(minionType: MinionType): ResourcePackage {
-        val level = this[minionType].factoryLevel
-        return factoryUpgradeCost(minionType, level)
+        return factoryUpgradeCostCache.getOrPut(minionType) {
+            val level = this[minionType].factoryLevel
+            factoryUpgradeCost(minionType, level)
+        }
     }
 
     fun getRepairCost(): ResourcePackage {

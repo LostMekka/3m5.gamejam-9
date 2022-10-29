@@ -10,4 +10,14 @@ data class ResourcePackage(
         circles += other.circles
         squares += other.squares
     }
+
+    operator fun minusAssign(other: ResourcePackage) {
+        triangles -= other.triangles
+        circles -= other.circles
+        squares -= other.squares
+    }
+
+    operator fun contains(other: ResourcePackage): Boolean {
+        return triangles >= other.triangles && circles >= other.circles && squares >= other.squares
+    }
 }
