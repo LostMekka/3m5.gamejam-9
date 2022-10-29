@@ -7,9 +7,9 @@ class GameState(
     var factoryHp: Hp = Hp(total = 1000),
     var doorIsOpen: Boolean = true,
 
-    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank),
-    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer),
-    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner),
+    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank,2,4),
+    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer,4,2),
+    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner,0,1),
 
     var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 

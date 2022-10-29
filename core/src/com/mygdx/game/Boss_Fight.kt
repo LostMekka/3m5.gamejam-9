@@ -17,12 +17,7 @@ enum class BossState{
 
 class Boss_Fight(val state:GameState) {
     var fightmode=Fightmode.NEUTRAL
-    var archer_defense=1
-    var archer_offence=4
-    var tank_defence=4
-    var tank_offence=2
     var baseDammage=10
-    var miner_defense=1
     var bossState=BossState.SPAWNING
 
 
@@ -32,8 +27,8 @@ class Boss_Fight(val state:GameState) {
 
     fun minionattack():Boolean{
         var attackvalue=0f
-        attackvalue+= (state.archerMinionData.minionCountOutside*archer_offence)
-        attackvalue+= (state.tankMinionData.minionCountOutside*tank_offence)
+        attackvalue+= (state.archerMinionData.minionCountOutside*state.archerMinionData.offence)
+        attackvalue+= (state.tankMinionData.minionCountOutside*state.tankMinionData.offence)
         val multi:Float= when (fightmode){
             Fightmode.NEUTRAL->1f
             Fightmode.DEFENCE->0.5f
@@ -74,16 +69,16 @@ class Boss_Fight(val state:GameState) {
         if (state.tankMinionData.minionCountOutside>0||state.archerMinionData.minionCountOutside>0){
             bossState=BossState.FIGHTERATTACK
             dammage=(dammage*multi)
-            var dealt= min(state.tankMinionData.minionCountOutside,(dammage/tank_defence))
+            var dealt= min(state.tankMinionData.minionCountOutside,(dammage/state.tankMinionData.defence))
             state.tankMinionData.minionCountOutside-=dealt
-            dealt= min(state.archerMinionData.minionCountOutside,dammage/archer_defense)
+            dealt= min(state.archerMinionData.minionCountOutside,dammage/state.archerMinionData.defence)
             state.archerMinionData.minionCountOutside-=dealt
         }else{
 
             if(state.minerMinionData.minionCountOutside>0){
                 bossState=BossState.MINERATTACK
 
-                state.minerMinionData.minionCountOutside-=min(state.minerMinionData.minionCountOutside,dammage/miner_defense)
+                state.minerMinionData.minionCountOutside-=min(state.minerMinionData.minionCountOutside,dammage/state.minerMinionData.defence)
             }else{
                 bossState=BossState.CASTLEATTACK
 
