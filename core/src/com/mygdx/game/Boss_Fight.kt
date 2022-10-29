@@ -20,6 +20,17 @@ class Boss_Fight(val state:GameState) {
     var baseDammage=1
     var bossState=BossState.SPAWNING
 
+    var basicAttack:Attack= Attack(1f,null)
+    var bosses= mutableListOf<Boss>()
+
+    init {
+        bosses.add(Boss(1,"Hier könnte ihre Werbung stehen","Bööööses Monster", listOf(basicAttack)))
+
+    }
+    var boss:Boss=bosses.get(0)
+
+
+
 
     fun setmode(f:Fightmode){
         fightmode=f
@@ -47,8 +58,9 @@ class Boss_Fight(val state:GameState) {
     }
 
     fun respawnBoss(){
-        state.bossHp.current=state.bossHp.total
         state.bossLevel=(state.archerMinionData.factoryLevel+state.tankMinionData.factoryLevel/2)
+        state.bossHp.total=10*state.bossLevel
+        state.bossHp.current=state.bossHp.total
     }
 
     fun giveLoot(){
@@ -66,7 +78,8 @@ class Boss_Fight(val state:GameState) {
             Fightmode.DEFENCE->0.5f
             Fightmode.OFFENCE->2f
         }
-        var dammage:Float= (state.bossLevel*baseDammage).toFloat()
+        val newAttack=boss.nextAttack();
+        var dammage:Float= (boss.level*baseDammage*newAttack.dammage)
 
         if (state.tankMinionData.minionCountOutside>0){
             bossState=BossState.FIGHTERATTACK
@@ -111,5 +124,24 @@ class Boss_Fight(val state:GameState) {
 
 }
 
+class Attack(val dammage:Float,var picture:String?){
 
+}
+
+class Boss(val level:Int,val image:String,val name:String,val attacks: List<Attack>){
+    var point=0
+
+    fun nextAttack():Attack{
+        var res: Attack =Attack(1f,null)
+        if (!attacks.isEmpty()){
+            res=attacks.get(point)
+            point =(point+1)%attacks.size
+            if (res.picture==null)
+                res.picture=image;
+        }
+        return res
+    }
+
+
+}
 
