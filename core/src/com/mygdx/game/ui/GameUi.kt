@@ -36,41 +36,33 @@ fun createRepairButton(stage: Stage, gameState: GameState) {
     }
 }
 
-fun createHealth(stage: Stage, gameState: GameState) {
+fun createHealth(stage: Stage) {
     stage.actors {
         flowGroup(vertical = false) {
             y = stage.height - 20f
             x = 20f
 
-            visLabel(gameState.factoryHp.current.toString() + " / " + gameState.factoryHp.total.toString()) {
-                name = "factoryHp"
-            }
+            visLabel("") { name = "factoryHp" }
         }
     }
 }
 
-fun createResources(stage: Stage, gameState: GameState) {
+fun createResources(stage: Stage) {
     stage.actors {
         flowGroup(vertical = true) {
             y = stage.height - 20f
             x = 120f
 
             flowGroup {
-                visLabel(gameState.resourceInventory.squares.toString()) {
-                    name = "res1"
-                }
+                visLabel("") { name = "res1" }
             }
 
             flowGroup {
-                visLabel(gameState.resourceInventory.circles.toString()) {
-                    name = "res2"
-                }
+                visLabel("") { name = "res2" }
             }
 
             flowGroup {
-                visLabel(gameState.resourceInventory.triangles.toString()) {
-                    name = "res3"
-                }
+                visLabel("") { name = "res3" }
             }
         }.also {
             it.spacing = 20f
@@ -84,34 +76,33 @@ class GameUi(private val gameState: GameState) {
     }
     val stage = createStage()
 
+    private val factoryHp by lazy { findWidget<VisLabel>("factoryHp") }
+    private val res1 by lazy { findWidget<VisLabel>("res1") }
+    private val res2 by lazy { findWidget<VisLabel>("res2") }
+    private val res3 by lazy { findWidget<VisLabel>("res3") }
+
     init {
-        createHealth(stage, gameState)
+        createHealth(stage)
         createRepairButton(stage, gameState)
-        createResources(stage, gameState)
+        createResources(stage)
     }
 
     fun update() {
-        findWidget<VisLabel>("factoryHp")?.setText(
+        factoryHp?.setText(
             gameState.factoryHp.current.toString() + " / " + gameState.factoryHp.total.toString()
         )
-
-        findWidget<VisLabel>("res1")?.setText(
-            gameState.resourceInventory.squares
-        )
-
-        findWidget<VisLabel>("res2")?.setText(
-            gameState.resourceInventory.circles
-        )
-
-        findWidget<VisLabel>("res3")?.setText(
-            gameState.resourceInventory.triangles
-        )
+        res1?.setText(gameState.resourceInventory.triangles)
+        res2?.setText(gameState.resourceInventory.circles)
+        res3?.setText(gameState.resourceInventory.squares)
     }
 
     private fun <T : Actor?> findWidget(name: String): T? {
         stage.actors.forEach {
             if (it is Group) {
-                return it.findActor<T>(name)
+                val actor = it.findActor<T>(name)
+                if (actor != null) {
+                    return actor
+                }
             }
         }
 
