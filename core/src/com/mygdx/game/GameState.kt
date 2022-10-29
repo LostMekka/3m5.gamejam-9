@@ -30,8 +30,9 @@ class GameState(
     var bossHp: Int = 1000,
 
 ) {
-    var lastFightUpdate=0
+    var lastFightUpdate=0f
     var fight:Boss_Fight= Boss_Fight(this)
+    val round_length=1
     fun calculateFrame(delta: Float) {
         calculateFactoryFrame(delta)
         calculateCombatFrame(delta)
@@ -42,7 +43,10 @@ class GameState(
     }
 
     private fun calculateCombatFrame(delta: Float) {
-        // TODO
+        if (delta>lastFightUpdate+round_length){
+            lastFightUpdate=delta;
+            fight.round();
+        }
     }
 
     fun onGGClicked() {
