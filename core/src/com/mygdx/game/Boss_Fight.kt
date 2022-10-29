@@ -39,9 +39,9 @@ class Boss_Fight(val state:GameState) {
             Fightmode.DEFENCE->0.5f
             Fightmode.OFFENCE->2f
         }
-        state.bossHp-=(attackvalue * multi).toInt()
+        state.bossHp.current-=(attackvalue * multi).toInt()
 
-        if (state.bossHp<=0){
+        if (state.bossHp.isDead){
             giveLoot()
             respawnBoss()
             return true
@@ -50,7 +50,7 @@ class Boss_Fight(val state:GameState) {
     }
 
     fun respawnBoss(){
-        state.bossHp=1000
+        state.bossHp.current=state.bossHp.total
         state.bossLevel=(state.archerMinionData.factoryLevel+state.tankMinionData.factoryLevel/2)
     }
 
@@ -87,9 +87,9 @@ class Boss_Fight(val state:GameState) {
             }else{
                 bossState=BossState.CASTLEATTACK
 
-                state.factoryHp-= min(state.factoryHp.toFloat(),dammage).toInt()
+                state.factoryHp.current-= min(state.factoryHp.current.toFloat(),dammage).toInt()
 
-                if (state.factoryHp<=0){
+                if (state.factoryHp.isDead){
                     lost()
                 }
             }
@@ -104,8 +104,8 @@ class Boss_Fight(val state:GameState) {
     }
 
     fun round(){
-        if (bossState!=BossState.CASTLEATTACK&&state.factoryHp<state.factoryMaxHp)
-            state.factoryHp=min(state.factoryMaxHp,state.factoryHp+5)
+        if (bossState!=BossState.CASTLEATTACK&&state.factoryHp.current<state.factoryHp.total)
+            state.factoryHp.current=min(state.factoryHp.total,state.factoryHp.current+5)
         if (!minionattack()){
             bossattack()
         }
