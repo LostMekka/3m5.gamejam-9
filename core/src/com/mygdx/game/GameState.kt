@@ -17,9 +17,11 @@ class GameState(
     var minionMinerCountInside: Float = 0f,
     var minionMinerCountOutside: Float = 0f,
 
-    var resourceTriangle: Int = 100,
-    var resourceCircle: Int = 0,
-    var resourceSquare: Int = 0,
+    var resourceInventory: ResourcePackage = ResourcePackage(
+        triangles = 100,
+        circles = 0,
+        squares = 0,
+    ),
 
     var bossLevel: Int = 1,
     var bossHp: Int = 1000,
