@@ -21,8 +21,9 @@ class GameState(
     var lastFightUpdate=0f
     var lastMiningUpdate=0f
     var fight:Boss_Fight= Boss_Fight(this)
-    val fight_round_length=1
-    val mining_round_length=3
+    val fight_round_length=1f
+    val mining_round_length=0.5f
+    val rate=0.1f
 
 
     private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
@@ -66,7 +67,7 @@ class GameState(
     private fun calculateMiningFrame(delta: Float) {
         if (delta>lastFightUpdate+mining_round_length&&doorIsOpen){
             lastMiningUpdate=delta
-            this.resourceInventory.triangles+=minerMinionData.minionCountOutside.toInt()
+            this.resourceInventory.triangles+=(rate*minerMinionData.minionCountOutside).toInt()
 
         }
     }

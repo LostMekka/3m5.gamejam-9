@@ -66,31 +66,32 @@ class Boss_Fight(val state:GameState) {
         }
         var dammage:Float= (state.bossLevel*baseDammage).toFloat()
 
-        if (state.tankMinionData.minionCountOutside>0||state.archerMinionData.minionCountOutside>0){
+        if (state.tankMinionData.minionCountOutside>0){
             bossState=BossState.FIGHTERATTACK
             dammage=(dammage*multi)
-            var dealt= min(state.tankMinionData.minionCountOutside,(dammage/state.tankMinionData.defence))
-            state.tankMinionData.minionCountOutside-=dealt
-            dealt= min(state.archerMinionData.minionCountOutside,dammage/state.archerMinionData.defence)
-            state.archerMinionData.minionCountOutside-=dealt
-        }else{
+            state.tankMinionData.minionCountOutside-=min(state.tankMinionData.minionCountOutside,(dammage/state.tankMinionData.defence))}else {
+            if (state.archerMinionData.minionCountOutside > 0) {
+                bossState=BossState.FIGHTERATTACK
+                dammage=(dammage*multi)
+                state.archerMinionData.minionCountOutside -= min(state.archerMinionData.minionCountOutside, dammage / state.archerMinionData.defence)
+            } else {
+                if (state.minerMinionData.minionCountOutside > 0) {
+                    bossState = BossState.MINERATTACK
+                    state.minerMinionData.minionCountOutside -= min(
+                        state.minerMinionData.minionCountOutside,
+                        dammage / state.minerMinionData.defence
+                    )
+                } else {
+                    bossState = BossState.CASTLEATTACK
+                    state.factoryHp.current -= min(state.factoryHp.current.toFloat(), dammage).toInt()
 
-            if(state.minerMinionData.minionCountOutside>0){
-                bossState=BossState.MINERATTACK
-
-                state.minerMinionData.minionCountOutside-=min(state.minerMinionData.minionCountOutside,dammage/state.minerMinionData.defence)
-            }else{
-                bossState=BossState.CASTLEATTACK
-
-                state.factoryHp.current-= min(state.factoryHp.current.toFloat(),dammage).toInt()
-
-                if (state.factoryHp.isDead){
-                    lost()
+                    if (state.factoryHp.isDead) {
+                        lost()
+                    }
                 }
+
             }
-
         }
-
 
     }
 
