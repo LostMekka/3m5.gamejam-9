@@ -17,7 +17,7 @@ enum class BossState{
 
 class Boss_Fight(val state:GameState) {
     var fightmode=Fightmode.NEUTRAL
-    var baseDammage=10
+    var baseDammage=1
     var bossState=BossState.SPAWNING
 
 
@@ -29,6 +29,7 @@ class Boss_Fight(val state:GameState) {
         var attackvalue=0f
         attackvalue+= (state.archerMinionData.minionCountOutside*state.archerMinionData.offence)
         attackvalue+= (state.tankMinionData.minionCountOutside*state.tankMinionData.offence)
+        if (attackvalue>0){
         val multi:Float= when (fightmode){
             Fightmode.NEUTRAL->1f
             Fightmode.DEFENCE->0.5f
@@ -40,6 +41,7 @@ class Boss_Fight(val state:GameState) {
             giveLoot()
             respawnBoss()
             return true
+        }
         }
         return false
     }

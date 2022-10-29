@@ -15,7 +15,7 @@ class GameState(
     var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 
     var bossLevel: Int = 1,
-    var bossHp: Hp = Hp(total = 1000),
+    var bossHp: Hp = Hp(total = 10),
 ) {
 
     var lastFightUpdate=0f
@@ -39,6 +39,7 @@ class GameState(
         calculateFactoryFrame(delta)
         calculateCombatFrame(delta)
         calculateMiningFrame(delta)
+        println(bossHp.current)
     }
 
     private fun calculateFactoryFrame(delta: Float) {
@@ -57,16 +58,18 @@ class GameState(
     }
 
     private fun calculateCombatFrame(delta: Float) {
-        if (delta>lastFightUpdate+fight_round_length){
-            lastFightUpdate=delta
+        lastFightUpdate+=delta;
+        if (lastFightUpdate>=fight_round_length){
+            lastFightUpdate=0f
             fight.round()
 
         }
     }
 
     private fun calculateMiningFrame(delta: Float) {
-        if (delta>lastFightUpdate+mining_round_length&&doorIsOpen){
-            lastMiningUpdate=delta
+        lastMiningUpdate+=delta;
+        if (lastMiningUpdate>=mining_round_length&&doorIsOpen){
+            lastMiningUpdate=0f
             this.resourceInventory.triangles+=(rate*minerMinionData.minionCountOutside).toInt()
 
         }
