@@ -32,8 +32,8 @@ class Boss_Fight(val state:GameState) {
 
     fun minionattack():Boolean{
         var attackvalue=0f
-        attackvalue+= (state.minionArcherCountOutside*archer_offence)
-        attackvalue+= (state.minionTankCountOutside*tank_offence)
+        attackvalue+= (state.archerMinionData.minionCountOutside*archer_offence)
+        attackvalue+= (state.tankMinionData.minionCountOutside*tank_offence)
         val multi:Float= when (fightmode){
             Fightmode.NEUTRAL->1f
             Fightmode.DEFENCE->0.5f
@@ -51,7 +51,7 @@ class Boss_Fight(val state:GameState) {
 
     fun respawnBoss(){
         state.bossHp=1000
-        state.bossLevel=(state.minionArcherFactoryLevel+state.minionTankFactoryLevel/2)
+        state.bossLevel=(state.archerMinionData.factoryLevel+state.tankMinionData.factoryLevel/2)
     }
 
     fun giveLoot(){
@@ -71,23 +71,23 @@ class Boss_Fight(val state:GameState) {
         }
         var dammage:Float= (state.bossLevel*baseDammage).toFloat()
 
-        if (state.minionTankCountOutside>0||state.minionArcherCountOutside>0){
+        if (state.tankMinionData.minionCountOutside>0||state.archerMinionData.minionCountOutside>0){
             bossState=BossState.FIGHTERATTACK
             dammage=(dammage*multi)
-            var dealt= min(state.minionTankCountOutside,(dammage/tank_defence))
-            state.minionTankCountOutside-=dealt
-            dealt= min(state.minionArcherCountOutside,dammage/archer_defense)
-            state.minionArcherCountOutside-=dealt
+            var dealt= min(state.tankMinionData.minionCountOutside,(dammage/tank_defence))
+            state.tankMinionData.minionCountOutside-=dealt
+            dealt= min(state.archerMinionData.minionCountOutside,dammage/archer_defense)
+            state.archerMinionData.minionCountOutside-=dealt
         }else{
 
-            if(state.minionMinerCountOutside>0){
+            if(state.minerMinionData.minionCountOutside>0){
                 bossState=BossState.MINERATTACK
 
-                state.minionMinerCountOutside-=min(state.minionMinerCountOutside,dammage/miner_defense)
+                state.minerMinionData.minionCountOutside-=min(state.minerMinionData.minionCountOutside,dammage/miner_defense)
             }else{
                 bossState=BossState.CASTLEATTACK
 
-                state.factoryHp-= min(state.minionMinerCountOutside,dammage).toInt()
+                state.factoryHp-= min(state.factoryHp.toFloat(),dammage).toInt()
 
                 if (state.factoryHp<=0){
                     lost()

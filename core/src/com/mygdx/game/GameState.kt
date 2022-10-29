@@ -8,38 +8,46 @@ class GameState(
     var factoryHp: Int = factoryMaxHp,
     var doorIsOpen: Boolean = true,
 
-    var minionTankFactoryLevel: Int = 1,
-    var minionTankCountInside: Float = 0f,
-    var minionTankCountOutside: Float = 0f,
+    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank),
+    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer),
+    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner),
 
-    var minionArcherFactoryLevel: Int = 1,
-    var minionArcherCountInside: Float = 0f,
-    var minionArcherCountOutside: Float = 0f,
-
-    var minionMinerFactoryLevel: Int = 1,
-    var minionMinerCountInside: Float = 0f,
-    var minionMinerCountOutside: Float = 0f,
-
-    var resourceInventory: ResourcePackage = ResourcePackage(
-        triangles = 100,
-        circles = 0,
-        squares = 0,
-    ),
+    var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 
     var bossLevel: Int = 1,
     var bossHp: Int = 1000,
-
 ) {
+
     var lastFightUpdate=0f
     var fight:Boss_Fight= Boss_Fight(this)
     val round_length=1
+
+
+    operator fun get(minionType: MinionType) = when (minionType) {
+        MinionType.Tank -> tankMinionData
+        MinionType.Archer -> archerMinionData
+        MinionType.Miner -> minerMinionData
+    }
+
+
     fun calculateFrame(delta: Float) {
         calculateFactoryFrame(delta)
         calculateCombatFrame(delta)
     }
 
     private fun calculateFactoryFrame(delta: Float) {
-        // TODO
+        for (minionType in MinionType.values()) {
+            this[minionType].apply {
+                factoryProgress += factorySpeedForLevel(factoryLevel) * delta
+                val fullProgress = factoryProgress.toInt()
+                factoryProgress -= fullProgress
+                minionCountInside += fullProgress
+                if (doorIsOpen) {
+                    minionCountOutside += minionCountInside
+                    minionCountInside = 0f
+                }
+            }
+        }
     }
 
     private fun calculateCombatFrame(delta: Float) {
@@ -71,11 +79,7 @@ class GameState(
     }
 
     fun getUpgradeCost(minionType: MinionType): ResourcePackage {
-        val level = when (minionType) {
-            MinionType.Tank -> minionTankFactoryLevel
-            MinionType.Archer -> minionArcherFactoryLevel
-            MinionType.Miner -> minionMinerFactoryLevel
-        }
+        val level = this[minionType].factoryLevel
         return ResourcePackage(
             triangles = (10 * 1.3.pow(level)).roundToInt(),
             circles = 0,
@@ -90,4 +94,8 @@ class GameState(
             squares = 0,
         )
     }
+}
+
+fun factorySpeedForLevel(level: Int): Float {
+    return 0.1f * level
 }
