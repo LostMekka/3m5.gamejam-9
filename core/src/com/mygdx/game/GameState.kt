@@ -23,4 +23,37 @@ class GameState(
 
     var bossLevel: Int = 1,
     var bossHp: Int = 1000,
-)
+) {
+    fun calculateFrame(delta: Float) {
+        calculateFactoryFrame(delta)
+        calculateCombatFrame(delta)
+    }
+
+    private fun calculateFactoryFrame(delta: Float) {
+        // TODO
+    }
+
+    private fun calculateCombatFrame(delta: Float) {
+        // TODO
+    }
+
+    fun onGGClicked() {
+        // TODO
+    }
+
+    fun onRepairClicked() {
+        // TODO
+    }
+
+    fun onUpgradeTankFactoryClicked() {
+        // TODO
+    }
+
+    fun onUpgradeArcherFactoryClicked() {
+        // TODO
+    }
+
+    fun onToggleDoorClicked() {
+        // TODO
+    }
+}

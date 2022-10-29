@@ -18,6 +18,8 @@ class GameScreen : KtxScreen {
     var gameState = GameState()
 
     override fun render(delta: Float) {
+        gameState.calculateFrame(delta)
+
         batch.use {
             font.draw(it, "Hello Kotlin!", 100f, 100f)
         }
