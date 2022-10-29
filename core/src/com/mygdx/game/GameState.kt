@@ -4,8 +4,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 class GameState(
-    var factoryMaxHp: Int = 1000,
-    var factoryHp: Int = factoryMaxHp,
+    var factoryHp: Hp = Hp(total = 1000),
     var doorIsOpen: Boolean = true,
 
     var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank),
@@ -15,7 +14,7 @@ class GameState(
     var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 
     var bossLevel: Int = 1,
-    var bossHp: Int = 1000,
+    var bossHp: Hp = Hp(total = 1000),
 ) {
 
     var lastFightUpdate=0f
@@ -66,11 +65,7 @@ class GameState(
         // TODO
     }
 
-    fun onUpgradeTankFactoryClicked() {
-        // TODO
-    }
-
-    fun onUpgradeArcherFactoryClicked() {
+    fun onUpgradeFactoryClicked(minionType: MinionType) {
         // TODO
     }
 
@@ -80,16 +75,12 @@ class GameState(
 
     fun getUpgradeCost(minionType: MinionType): ResourcePackage {
         val level = this[minionType].factoryLevel
-        return ResourcePackage(
-            triangles = (10 * 1.3.pow(level)).roundToInt(),
-            circles = 0,
-            squares = 0,
-        )
+        return factoryUpgradeCost(minionType, level)
     }
 
     fun getRepairCost(): ResourcePackage {
         return ResourcePackage(
-            triangles = 5 * (factoryMaxHp - factoryHp),
+            triangles = 5 * factoryHp.missing,
             circles = 0,
             squares = 0,
         )
@@ -98,4 +89,12 @@ class GameState(
 
 fun factorySpeedForLevel(level: Int): Float {
     return 0.1f * level
+}
+
+fun factoryUpgradeCost(minionType: MinionType, level: Int): ResourcePackage {
+    return ResourcePackage(
+        triangles = (10 * 1.3.pow(level)).roundToInt(),
+        circles = 0,
+        squares = 0,
+    )
 }
