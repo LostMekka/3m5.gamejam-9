@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.mygdx.game.GameState
+import com.mygdx.game.ui.GameUi
 import ktx.app.KtxScreen
 import ktx.graphics.use
 
@@ -18,14 +19,22 @@ class GameScreen : KtxScreen {
     }
 
     var gameState = GameState()
+    private val ui = GameUi()
 
 
     override fun render(delta: Float) {
+        ui.stage.act()
         gameState.calculateFrame(delta)
 
         batch.use {
-            font.draw(it, "Hello Kotlin!", 100f, 100f)
+
+            it.color = Color.WHITE
+            ui.stage.draw()
         }
+    }
+
+    override fun resize(width: Int, height: Int) {
+        ui.stage.viewport.update(width, height)
     }
 
     override fun dispose() {

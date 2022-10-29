@@ -1,6 +1,5 @@
 package com.mygdx.game.common
 
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Sound
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
