@@ -19,12 +19,13 @@ class GameScreen : KtxScreen {
     }
 
     var gameState = GameState()
-    private val ui = GameUi()
+    private val ui = GameUi(gameState)
 
 
     override fun render(delta: Float) {
         ui.stage.act()
         gameState.calculateFrame(delta)
+        ui.update()
 
         batch.use {
 
