@@ -1,10 +1,13 @@
 package com.mygdx.game.screens
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.mygdx.game.GameState
+import com.mygdx.game.ui.GameUi
 import ktx.app.KtxScreen
 import ktx.graphics.use
 
@@ -18,14 +21,26 @@ class GameScreen : KtxScreen {
     }
 
     var gameState = GameState()
+    private val ui = GameUi(gameState)
 
 
     override fun render(delta: Float) {
+        ui.stage.act()
         gameState.calculateFrame(delta)
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
+
+        ui.update()
+
         batch.use {
-            font.draw(it, "Hello Kotlin!", 100f, 100f)
+
+            it.color = Color.WHITE
+            ui.stage.draw()
         }
+    }
+
+    override fun resize(width: Int, height: Int) {
+        ui.stage.viewport.update(width, height)
     }
 
     override fun dispose() {

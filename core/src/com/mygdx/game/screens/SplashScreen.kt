@@ -10,7 +10,7 @@ import ktx.graphics.use
 
 class SplashScreen(private var game: KtxGame<Screen>) : KtxScreen {
     private val batch = SpriteBatch()
-    private val img = Texture("blattgold_beaat_goldd.png")
+    private val img = Texture("blattgold.png")
     private var elapsed = 0f
 
 

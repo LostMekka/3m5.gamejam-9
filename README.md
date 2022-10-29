@@ -6,6 +6,6 @@
 
 **_by_**
 
-![Blattgold](./assets/blattgold_beaat_goldd.png)
+![Blattgold](./assets/blattgold.png)
 </div>
 

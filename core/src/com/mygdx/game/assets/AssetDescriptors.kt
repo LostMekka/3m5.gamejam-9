@@ -6,21 +6,23 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import ktx.collections.gdxArrayOf
 
 object AssetDescriptors {
 
     // === FONTS
-    val FONT : AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.fontPath, BitmapFont::class.java)
+    val FONT: AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.fontPath, BitmapFont::class.java)
     // HP Fonts
     // counters
 
     // === SOUNDS
-    val TEST_SOUND : AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.testSoundPath, Sound::class.java)
+    val TEST_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.testSoundPath, Sound::class.java)
+
     // Click
     // repair
     // upgrade
     // collect ressources (3x)
-    val REPAIR_SOUND : AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
+    val REPAIR_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
     // minion sounds (3x)
     // boss sounds
     // hits
@@ -38,19 +40,14 @@ object AssetDescriptors {
     // Holding cell
     // Ressourcenübersicht
 
-
     // == all descriptors ==
-    val ALL = com.badlogic.gdx.utils.Array<AssetDescriptor<*>>()
-
-    // static init
-    init {
-        ALL.addAll(
-            // FONT,
-            TEST_SOUND,
-        )
-    }
+    val ALL = gdxArrayOf<AssetDescriptor<*>>(
+        // FONT,
+        TEST_SOUND,
+        REPAIR_SOUND,
+    )
 
     fun setGamePlay() {
-        TODO("implement if neccessary")
+        TODO("implement if necessary")
     }
 }
