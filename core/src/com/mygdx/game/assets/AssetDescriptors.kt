@@ -47,6 +47,7 @@ object AssetDescriptors {
         ALL.addAll(
             // FONT,
             TEST_SOUND,
+            REPAIR_SOUND,
         )
     }
 
