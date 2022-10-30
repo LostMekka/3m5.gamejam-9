@@ -50,6 +50,7 @@ object AssetDescriptors {
     val BOSS: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.boss, Texture::class.java)
 
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
+    val BUTTON_PRESSED: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button_pressed, Texture::class.java)
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
 
     // Buttons
@@ -72,6 +73,7 @@ object AssetDescriptors {
         PENTAGON,
         TRIANGLE,
         BUTTON,
+        BUTTON_PRESSED,
         FRAME,
         PUNCH_1_SOUND,
         PUNCH_2_SOUND,

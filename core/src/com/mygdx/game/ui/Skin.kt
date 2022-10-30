@@ -23,10 +23,12 @@ fun loadSkin(): Skin {
 
         button {
             up = TextureRegionDrawable(assetManager.get(AssetDescriptors.BUTTON))
+            down = TextureRegionDrawable(assetManager.get(AssetDescriptors.BUTTON_PRESSED))
         }
 
         visImageButton {
             up = TextureRegionDrawable(assetManager.get(AssetDescriptors.BUTTON))
+            down = TextureRegionDrawable(assetManager.get(AssetDescriptors.BUTTON_PRESSED))
         }
 
         visTooltip {

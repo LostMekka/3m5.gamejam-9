@@ -327,27 +327,41 @@ class GameUi(private val gameState: PersistentGameState) {
                     }
                 }
             }
+
+            visTable {
+                x = 1432f
+                y = 710f
+
+                visImageButton {
+                    pad(4f, 30f, 16f, 30f)
+                    onClick { gameState.onGGPressed() }
+
+                    label("GG", style = "number")
+                }
+            }
         }
     }
 
     fun update() {
-        factoryHp?.setText("${gameState.resettableState.factoryHp.current} / ${gameState.resettableState.factoryHp.total}")
-        res1?.setText(gameState.resettableState.resourceInventory.triangles)
-        res2?.setText(gameState.resettableState.resourceInventory.circles)
-        res3?.setText(gameState.resettableState.resourceInventory.pentas)
+        val gs = gameState.resettableState
 
-        bossHp?.setText("${gameState.resettableState.bossHp.current} / ${gameState.resettableState.bossHp.total}")
-        bossLevel?.setText(gameState.resettableState.bossLevel)
+        factoryHp?.setText("${gs.factoryHp.current} / ${gs.factoryHp.total}")
+        res1?.setText(gs.resourceInventory.triangles)
+        res2?.setText(gs.resourceInventory.circles)
+        res3?.setText(gs.resourceInventory.pentas)
 
-        gate?.setText((if (gameState.resettableState.doorIsOpen) "Close" else "Open") + " gate")
+        bossHp?.setText("${gs.bossHp.current} / ${gs.bossHp.total}")
+        bossLevel?.setText(gs.bossLevel)
+
+        gate?.setText((if (gs.doorIsOpen) "Close" else "Open") + " gate")
 
         mapOf(
-            MinionType.Tank to gameState.resettableState.tankMinionData,
-            MinionType.Archer to gameState.resettableState.archerMinionData,
-            MinionType.Miner to gameState.resettableState.minerMinionData,
+            MinionType.Tank to gs.tankMinionData,
+            MinionType.Archer to gs.archerMinionData,
+            MinionType.Miner to gs.minerMinionData,
         ).forEach { (type, data) ->
             factories[type].also {
-                val upgradeCost = gameState.resettableState.getUpgradeCost(type)
+                val upgradeCost = gs.getUpgradeCost(type)
 
                 it?.level?.setText(data.factoryLevel)
                 it?.rate?.setText("")
