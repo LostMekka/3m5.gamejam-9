@@ -1,7 +1,7 @@
 <div style="display:flex;flex-direction:column;align-items:center;">
 
 
-# Smash
+# ClickPunk
 
 **_by_**
 
