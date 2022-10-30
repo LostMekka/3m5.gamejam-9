@@ -19,53 +19,46 @@ fun initUi() {
     Scene2DSkin.defaultSkin = loadSkin()
 }
 
-fun createRepairButton(stage: Stage, gameState: GameState) {
-    stage.actors {
-        flowGroup(vertical = false) {
-            y = stage.height - 70f
-            x = 20f
-
-            visTextButton("Repair") {
-                onClick {
-                    gameState.onRepairClicked()
-                }
-
-                it.name = "repair"
+private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: GameState) {
+    flowGroup(vertical = false) {
+        visTextButton("Repair") {
+            onClick {
+                gameState.onRepairClicked()
             }
+
+            it.name = "repair"
         }
     }
 }
 
-fun createHealth(stage: Stage) {
-    stage.actors {
-        flowGroup(vertical = false) {
-            y = stage.height - 20f
-            x = 20f
+private fun @Scene2dDsl KWidget<Actor>.factoryHealth() {
+    visLabel("") { name = "factoryHp" }
+}
 
-            visLabel("") { name = "factoryHp" }
-        }
+private fun @Scene2dDsl KWidget<Actor>.boss() {
+    flowGroup(vertical = false) {
+        visLabel("") { name = "bossHp" }
+        visLabel("1") { name = "bossLevel" }
+
+        spacing = 10f
     }
 }
 
-fun createResources(stage: Stage) {
-    stage.actors {
-        flowGroup(vertical = true) {
-            y = stage.height - 20f
-            x = 120f
 
-            flowGroup {
-                visLabel("") { name = "res1" }
-            }
+private fun @Scene2dDsl KWidget<Actor>.resources(stage: Stage) {
+    flowGroup {
+        spacing = 20f
 
-            flowGroup {
-                visLabel("") { name = "res2" }
-            }
+        flowGroup {
+            visLabel("") { name = "res1" }
+        }
 
-            flowGroup {
-                visLabel("") { name = "res3" }
-            }
-        }.also {
-            it.spacing = 20f
+        flowGroup {
+            visLabel("") { name = "res2" }
+        }
+
+        flowGroup {
+            visLabel("") { name = "res3" }
         }
     }
 }
@@ -77,23 +70,39 @@ class GameUi(private val gameState: GameState) {
     val stage = createStage()
 
     private val factoryHp by lazy { findWidget<VisLabel>("factoryHp") }
+    private val bossHp by lazy { findWidget<VisLabel>("bossHp") }
     private val res1 by lazy { findWidget<VisLabel>("res1") }
     private val res2 by lazy { findWidget<VisLabel>("res2") }
     private val res3 by lazy { findWidget<VisLabel>("res3") }
 
     init {
-        createHealth(stage)
-        createRepairButton(stage, gameState)
-        createResources(stage)
+        stage.actors {
+            flowGroup(vertical = true) {
+                x = 20f
+                y = stage.height - 20f
+                spacing = 600f
+
+                flowGroup(vertical = true) {
+                    spacing = 20f
+
+                    factoryHealth()
+                    repairButton(gameState)
+                }
+
+                resources(stage)
+
+                boss()
+            }
+        }
     }
 
     fun update() {
-        factoryHp?.setText(
-            gameState.factoryHp.current.toString() + " / " + gameState.factoryHp.total.toString()
-        )
+        factoryHp?.setText("${gameState.factoryHp.current} / ${gameState.factoryHp.total}")
         res1?.setText(gameState.resourceInventory.triangles)
         res2?.setText(gameState.resourceInventory.circles)
         res3?.setText(gameState.resourceInventory.squares)
+
+        bossHp?.setText("${gameState.bossHp.current} / ${gameState.bossHp.total}")
     }
 
     private fun <T : Actor?> findWidget(name: String): T? {
