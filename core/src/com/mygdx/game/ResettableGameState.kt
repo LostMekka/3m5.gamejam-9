@@ -43,9 +43,11 @@ class ResettableGameState(
     }
 
     fun calculateFrame(delta: Float) {
-        calculateFactoryFrame(delta)
-        calculateMiningFrame(delta)
-        calculateCombatFrame(delta)
+        if (!factoryHp.isDead) {
+            calculateFactoryFrame(delta)
+            calculateMiningFrame(delta)
+            calculateCombatFrame(delta)
+        }
     }
 
     private fun calculateFactoryFrame(delta: Float) {
@@ -118,6 +120,7 @@ class ResettableGameState(
     fun canRepairFactory(): Boolean {
         return when {
             factoryHp.isFull -> false
+            factoryHp.isDead -> false
             factoryRepairCostPerHpPoint !in resourceInventory -> false
             else -> true
         }
@@ -135,7 +138,11 @@ class ResettableGameState(
     }
 
     fun canUpgradeFactory(minionType: MinionType): Boolean {
-        return getUpgradeCost(minionType) in resourceInventory
+        return when {
+            factoryHp.isDead -> false
+            getUpgradeCost(minionType) in resourceInventory -> true
+            else -> false
+        }
     }
 
     fun getUpgradeCost(minionType: MinionType): ResourcePackage {
