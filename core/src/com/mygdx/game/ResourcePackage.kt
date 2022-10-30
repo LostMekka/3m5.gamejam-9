@@ -34,4 +34,8 @@ data class ResourcePackage(
             other.circles.let { if (it == 0) Int.MAX_VALUE else circles / it },
             other.squares.let { if (it == 0) Int.MAX_VALUE else squares / it },
         )
+
+    fun negative():Boolean{
+        return triangles<0||circles<0||squares<0
+    }
 }

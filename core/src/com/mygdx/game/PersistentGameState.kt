@@ -22,15 +22,28 @@ class PersistentGameState {
     }
 
     fun onUpgradeBaseAttack(minionType: MinionType){
-        resettableState[minionType].attackStrength*= 1.2f
+        if (resettableState.resourceInventory.contains(strengthUpgradeCost(minionType,resettableState[minionType].attackMultiplier))){
+            resettableState[minionType].attackMultiplier*= 1.2f
+            resettableState.resourceInventory-=strengthUpgradeCost(minionType,resettableState[minionType].attackMultiplier);
+
+        }
     }
 
     fun onUpgradeDefence(minionType: MinionType){
-        resettableState[minionType].defence*= 1.2f
+        if (resettableState.resourceInventory.contains(strengthUpgradeCost(minionType,resettableState[minionType].defenceMultiplier))){
+            resettableState[minionType].defenceMultiplier*= 1.2f
+            resettableState.resourceInventory-=strengthUpgradeCost(minionType,resettableState[minionType].defenceMultiplier);
+
+        }
     }
 
     fun onUpgradeRoundtrip(){
-        resettableState.roundTripShortening*=0.9f;
+        if (resettableState.resourceInventory.contains(roundtripUpgradeCost(resettableState.roundTripShortening))){
+            resettableState.roundTripShortening*=0.9f;
+            resettableState.resourceInventory-=roundtripUpgradeCost(resettableState.roundTripShortening);
+
+        }
+
     }
 
     fun calculateFrame(delta: Float) {
