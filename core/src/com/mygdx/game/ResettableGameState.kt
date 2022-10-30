@@ -1,5 +1,6 @@
 package com.mygdx.game
 
+import com.mygdx.game.assets.AssetDescriptors
 import com.mygdx.game.common.soundController
 import kotlin.math.min
 import kotlin.math.pow
@@ -26,13 +27,15 @@ class ResettableGameState(
     var sendOutTime = 0f;
     var roundTripShortening = 1f;
 
-    var basicAttack: Attack = Attack(1f, null)
-    var waitAttack: Attack = Attack(0f, null)
+    var basicAttack: Attack = Attack(1f,0.2f, assetManager.get(AssetDescriptors.BOSS_ATTACK))
+    var waitAttack: Attack = Attack(0f, 0.2f,null)
     var bosses = mutableListOf(
-        Boss(1, "Hier könnte ihre Werbung stehen", "Bööööses Monster", listOf(basicAttack)),
-        Boss(1, "Hier könnte ihre Werbung stehen", "So Bööööses Monster", listOf(basicAttack, waitAttack))
+        Boss(1, assetManager.get(AssetDescriptors.BOSS), "Bööööses Monster", listOf(basicAttack)),
+        Boss(1, assetManager.get(AssetDescriptors.BOSS), "So Bööööses Monster", listOf(basicAttack, waitAttack))
     )
     var boss: Boss = bosses.first()
+
+    var currentEffect=mutableListOf<Attack>()
 
     private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
 
@@ -155,4 +158,8 @@ class ResettableGameState(
     fun onToggleDoorClicked() {
         doorIsOpen = !doorIsOpen
     }
+
+
 }
+
+//class Effect(var time:Float=1f,var name:String)

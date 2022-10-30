@@ -1,5 +1,7 @@
 package com.mygdx.game
 
+import com.badlogic.gdx.graphics.Texture
+import com.mygdx.game.assets.AssetDescriptors
 import com.mygdx.game.common.soundController
 import kotlin.math.*
 
@@ -32,6 +34,7 @@ class BossFight(private val state: ResettableGameState) {
         val tankDamage = state.tankMinionData.minionCountOutside * state.tankMinionData.attackStrength
         val totalDamage = archerDamage + tankDamage
         if (totalDamage > 0) {
+            state.currentEffect.add(Attack(1f,0.2f,assetManager.get(AssetDescriptors.BOSS_ATTACK)))
             val bossIsDead = state.bossHp.damage((totalDamage * fightModeAttackMultiplier).roundToInt())
             if (bossIsDead) {
                 giveLoot()
@@ -63,7 +66,10 @@ class BossFight(private val state: ResettableGameState) {
         val newAttack = state.boss.nextAttack()
         var damage: Float = (bossBaseDamage(state.bossLevel) * newAttack.damage)
 
+        //state.currentEffect.add(newAttack)
+
         for (minionType in MinionType.values()) {
+
             val factor = when (minionType) {
                 MinionType.Miner -> 1f / state[minionType].defence
                 else -> fightModeDefenseMultiplier / state[minionType].defence
@@ -104,13 +110,13 @@ class BossFight(private val state: ResettableGameState) {
     }
 }
 
-class Attack(val damage: Float, var picture: String?)
+class Attack(val damage: Float, var time:Float, var picture: Texture?)
 
-class Boss(val level: Int, val image: String, val name: String, val attacks: List<Attack>) {
+class Boss(val level: Int, val image: Texture, val name: String, val attacks: List<Attack>) {
     var currentAttackIndex = 0
 
     fun nextAttack(): Attack {
-        val attack = attacks.getOrNull(currentAttackIndex) ?: Attack(1f, null)
+        val attack = attacks.getOrNull(currentAttackIndex) ?: Attack(1f, 0.1f, null)
         currentAttackIndex = (currentAttackIndex + 1) % attacks.size
         if (attack.picture == null) attack.picture = image
         return attack

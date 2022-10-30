@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.mygdx.game.BossController
 import com.mygdx.game.MinionController
 import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
@@ -30,6 +31,7 @@ class GameScreen : KtxScreen {
     var gameState = PersistentGameState()
     private val ui = GameUi(gameState)
     private val minionController = MinionController(tankTexture, archerTexture, minerTexture)
+    val bossController=BossController(gameState.resettableState.boss.image)
 
     override fun render(delta: Float) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
@@ -39,10 +41,13 @@ class GameScreen : KtxScreen {
         gameState.calculateFrame(modifiedDelta)
         ui.update()
         minionController.update(modifiedDelta, gameState)
+        bossController.updateBoss(gameState.resettableState.boss.image)
+
 
         batch.use {
             it.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.width.toFloat())
             minionController.draw(it)
+            bossController.display(it,delta,gameState.resettableState.currentEffect)
         }
 
         ui.stage.draw()
