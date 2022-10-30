@@ -51,14 +51,11 @@ class BossFight(private val state: ResettableGameState) {
             ?: state.bosses.random()
     }
 
-    val nextBossLoot
-        get() = ResourcePackage(
-            circles = state.bossLevel,
-            squares = state.bossLevel / 10,
-        )
-
     private fun giveLoot() {
-        state.resourceInventory += nextBossLoot
+        state.resourceInventory += ResourcePackage(
+            circles = bossLootCircles(state.bossLevel),
+            squares = bossLootPentas(state.bossLevel),
+        )
     }
 
     private fun bossAttack() {
