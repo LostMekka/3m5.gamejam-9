@@ -38,4 +38,16 @@ class SoundController {
             punch5Sound,
         ).random().play()
     }
+
+    fun playAnyRandomSound() {
+        listOf(
+            testSound,
+            repairSound,
+            punch1Sound,
+            punch2Sound,
+            punch3Sound,
+            punch4Sound,
+            punch5Sound,
+        ).random().play()
+    }
 }

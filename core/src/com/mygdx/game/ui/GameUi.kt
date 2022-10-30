@@ -12,7 +12,6 @@ import com.kotcrab.vis.ui.layout.FlowGroup
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.mygdx.game.MinionType
 import com.mygdx.game.PersistentGameState
-import com.mygdx.game.ResettableGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import ktx.actors.onClick
@@ -26,7 +25,7 @@ fun initUi() {
     Scene2DSkin.defaultSkin = loadSkin()
 }
 
-private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: ResettableGameState) {
+private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: PersistentGameState) {
     flowGroup(vertical = false) {
         visImageButton {
             name = "repair"
@@ -34,7 +33,7 @@ private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: ResettableGameSta
             padBottom(4f)
             padTop(-4f)
             onClick {
-                gameState.onRepairClicked()
+                gameState.resettableState.onRepairClicked()
             }
 
             flowGroup {
@@ -113,7 +112,7 @@ private fun @Scene2dDsl KWidget<Actor>.resources() {
     }
 }
 
-private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: ResettableGameState) {
+private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: PersistentGameState) {
     val minionTypeName = type.name.lowercase()
 
     visTable { table ->
@@ -132,7 +131,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
             it.fillX()
             it.fillY()
             it.pad(20f)
-            onClick { gameState.onUpgradeFactoryClicked(type) }
+            onClick { gameState.resettableState.onUpgradeFactoryClicked(type) }
 
             visTable {
                 pad(10f)
@@ -246,7 +245,7 @@ class GameUi(private val gameState: PersistentGameState) {
                     spacing = 20f
 
                     factoryHealth()
-                    repairButton(gameState.resettableState)
+                    repairButton(gameState)
                 }
             }
 
@@ -270,13 +269,13 @@ class GameUi(private val gameState: PersistentGameState) {
                 y = 700f
 
                 visTable {
-                    factory(MinionType.Tank, gameState.resettableState)
+                    factory(MinionType.Tank, gameState)
 
                     row()
-                    factory(MinionType.Archer, gameState.resettableState)
+                    factory(MinionType.Archer, gameState)
 
                     row()
-                    factory(MinionType.Miner, gameState.resettableState)
+                    factory(MinionType.Miner, gameState)
                 }
             }
 
@@ -327,35 +326,47 @@ class GameUi(private val gameState: PersistentGameState) {
                     }
                 }
             }
+
+            visTable {
+                x = 1432f
+                y = 710f
+
+                visImageButton {
+                    pad(4f, 30f, 16f, 30f)
+                    onClick { gameState.onGGPressed() }
+
+                    label("GG", style = "number")
+                }
+            }
         }
     }
 
     fun update() {
-        factoryHp?.setText("${gameState.resettableState.factoryHp.current} / ${gameState.resettableState.factoryHp.total}")
-        res1?.setText(gameState.resettableState.resourceInventory.triangles)
-        res2?.setText(gameState.resettableState.resourceInventory.circles)
-        res3?.setText(gameState.resettableState.resourceInventory.pentas)
+        val gs = gameState.resettableState
 
-        bossHp?.setText("${gameState.resettableState.bossHp.current} / ${gameState.resettableState.bossHp.total}")
-        bossLevel?.setText(gameState.resettableState.bossLevel)
+        factoryHp?.setText("${gs.factoryHp.current} / ${gs.factoryHp.total}")
+        res1?.setText(gs.resourceInventory.triangles)
+        res2?.setText(gs.resourceInventory.circles)
+        res3?.setText(gs.resourceInventory.pentas)
 
-        gate?.setText((if (gameState.resettableState.doorIsOpen) "Close" else "Open") + " gate")
+        bossHp?.setText("${gs.bossHp.current} / ${gs.bossHp.total}")
+        bossLevel?.setText(gs.bossLevel)
+
+        gate?.setText((if (gs.doorIsOpen) "Close" else "Open") + " gate")
 
         mapOf(
-            MinionType.Tank to gameState.resettableState.tankMinionData,
-            MinionType.Archer to gameState.resettableState.archerMinionData,
-            MinionType.Miner to gameState.resettableState.minerMinionData,
+            MinionType.Tank to gs.tankMinionData,
+            MinionType.Archer to gs.archerMinionData,
+            MinionType.Miner to gs.minerMinionData,
         ).forEach { (type, data) ->
             factories[type].also {
-                val upgradeCost = gameState.resettableState.getUpgradeCost(type)
+                val upgradeCost = gs.getUpgradeCost(type)
 
                 it?.level?.setText(data.factoryLevel)
                 it?.rate?.setText("")
 
                 it?.upgrade_triangles?.setText(upgradeCost.triangles)
                 it?.upgrade_circles?.setText(upgradeCost.circles)
-
-                println("${it?.level?.x} / ${it?.level?.y}")
 
                 // TODO Find labels only once
                 findWidget<VisLabel>("count_${type.name.lowercase()}_inside")
