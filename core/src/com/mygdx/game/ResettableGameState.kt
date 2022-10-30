@@ -1,5 +1,6 @@
 package com.mygdx.game
 
+import com.mygdx.game.assets.AssetDescriptors
 import com.mygdx.game.common.soundController
 import kotlin.math.min
 import kotlin.math.pow
@@ -29,8 +30,8 @@ class ResettableGameState(
     var basicAttack: Attack = Attack(1f, null)
     var waitAttack: Attack = Attack(0f, null)
     var bosses = mutableListOf(
-        Boss(1, "Hier könnte ihre Werbung stehen", "Bööööses Monster", listOf(basicAttack)),
-        Boss(1, "Hier könnte ihre Werbung stehen", "So Bööööses Monster", listOf(basicAttack, waitAttack))
+        Boss(1, assetManager.get(AssetDescriptors.BOSS), "Bööööses Monster", listOf(basicAttack)),
+        Boss(1, assetManager.get(AssetDescriptors.BOSS), "So Bööööses Monster", listOf(basicAttack, waitAttack))
     )
     var boss: Boss = bosses.first()
 

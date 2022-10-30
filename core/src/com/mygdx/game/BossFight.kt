@@ -1,5 +1,6 @@
 package com.mygdx.game
 
+import com.badlogic.gdx.graphics.Texture
 import com.mygdx.game.common.soundController
 import kotlin.math.*
 
@@ -104,9 +105,9 @@ class BossFight(private val state: ResettableGameState) {
     }
 }
 
-class Attack(val damage: Float, var picture: String?)
+class Attack(val damage: Float, var picture: Texture?)
 
-class Boss(val level: Int, val image: String, val name: String, val attacks: List<Attack>) {
+class Boss(val level: Int, val image: Texture, val name: String, val attacks: List<Attack>) {
     var currentAttackIndex = 0
 
     fun nextAttack(): Attack {
