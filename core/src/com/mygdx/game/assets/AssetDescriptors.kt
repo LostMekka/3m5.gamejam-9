@@ -85,6 +85,7 @@ object AssetDescriptors {
         MINION_WORKER,
         BOSS,
         FACTORY_BACKGROUND,
+        PROJECTILE,
     )
 
     fun setGamePlay() {
