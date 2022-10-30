@@ -77,7 +77,7 @@ class BossFight(private val state: ResettableGameState) {
         factoryNotAttackedSince = 0f
         var door =1f
         if (!state.doorIsOpen)door=door/1.5f
-        if (state.factoryHp.damage((damage*door).toInt())) lost()
+        if (state.factoryHp.damage(max(1,(damage*door).toInt()))) lost()
     }
 
     fun lost() {
