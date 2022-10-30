@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.mygdx.game.MinionController
 import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
@@ -21,29 +22,30 @@ class GameScreen : KtxScreen {
         color = Color.WHITE
     }
 
+    private val background = assetManager.get(AssetDescriptors.BACKGROUND)
+    private val tankTexture = assetManager.get(AssetDescriptors.MINION_TANK)
+    private val archerTexture = assetManager.get(AssetDescriptors.MINION_ARCHER)
+    private val minerTexture = assetManager.get(AssetDescriptors.MINION_WORKER)
+
     var gameState = PersistentGameState()
     private val ui = GameUi(gameState)
-
+    private val minionController = MinionController(tankTexture, archerTexture, minerTexture)
 
     override fun render(delta: Float) {
-        ui.stage.act()
-        gameState.calculateFrame(delta)
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
+        val modifiedDelta = delta * 1f
 
+        ui.stage.act()
+        gameState.calculateFrame(modifiedDelta)
         ui.update()
-
-        val background = assetManager.get(AssetDescriptors.BACKGROUND)
-
-        ui.stage.batch.begin()
-        ui.stage.batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.width.toFloat())
-        ui.stage.batch.end()
+        minionController.update(modifiedDelta, gameState)
 
         batch.use {
-
-            it.color = Color.WHITE
-            ui.stage.draw()
+            it.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.width.toFloat())
+            minionController.draw(it)
         }
+
+        ui.stage.draw()
     }
 
     override fun resize(width: Int, height: Int) {

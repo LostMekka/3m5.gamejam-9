@@ -75,7 +75,9 @@ class BossFight(private val state: ResettableGameState) {
         }
 
         factoryNotAttackedSince = 0f
-        if (state.factoryHp.damage(damage.toInt())) lost()
+        var door =1f
+        if (!state.doorIsOpen)door=door/1.5f
+        if (state.factoryHp.damage(max(1,(damage*door).toInt()))) lost()
     }
 
     fun lost() {
@@ -93,6 +95,12 @@ class BossFight(private val state: ResettableGameState) {
 
         if (factoryNotAttackedSince > 10f) state.factoryHp.heal(5)
         if (!minionAttack()) bossAttack()
+
+        val mincount=state.minerMinionData.minionCountInside;
+        if (mincount>0&&!state.factoryHp.isFull){
+            state.factoryHp.heal((mincount/50*state.minerMinionData.attackMultiplier).roundToInt())
+            if (state.tankMinionData.minionCountOutside<=0) state.minerMinionData.minionCountInside-=1
+        }
     }
 }
 
