@@ -20,15 +20,15 @@ class MinionController(
     minerTexture: Texture,
     private val projectileTexture: Texture,
 ) {
-    private val projectileSpeed = 800f
-    private val maxProjectiles = 20
-    private val maxAttackCoolDown = 0.05f
+    private val projectileSpeed = 900f
+    private val maxProjectiles = 50
+    private val maxAttackCoolDown = 0.025f
     private var attackCoolDown = 0f
 
     private val gateX = Gdx.graphics.width * 0.5f
     private val walkX1 = Gdx.graphics.width * 0.6f
     private val walkX2 = Gdx.graphics.width * 0.9f
-    private val bossPos = Vector2(1050f, 750f)
+    private val bossPos = Vector2(1135f, 810f)
 
     private val walkSpeed = 120f
     private val walkStateSpeed = 3.5f
@@ -37,9 +37,9 @@ class MinionController(
     private val maxMinionCount = 200
 
     private val yByType = mapOf(
-        MinionType.Tank to Gdx.graphics.height * 2f / 3f,
-        MinionType.Archer to Gdx.graphics.height * 2.5f / 6f,
-        MinionType.Miner to Gdx.graphics.height * 1f / 6f,
+        MinionType.Tank to Gdx.graphics.height * 0.55f,
+        MinionType.Archer to Gdx.graphics.height * 0.37f,
+        MinionType.Miner to Gdx.graphics.height * 0.12f,
     )
     private val textureByType = mapOf(
         MinionType.Tank to tankTexture,
@@ -102,8 +102,8 @@ class MinionController(
                 val y = m.pos.y + walkBobHeight * sin(m.walkState * MathUtils.PI)
                 batch.draw(
                     m.texture,
-                    x,
-                    y,
+                    x - m.texture.width / 2f,
+                    y - m.texture.width / 2f,
                     m.texture.width / 2f,
                     m.texture.height / 2f,
                     m.texture.width.toFloat(),
@@ -115,7 +115,7 @@ class MinionController(
                     0,
                     m.texture.width,
                     m.texture.height,
-                    m.pos.x < m.walkTarget.x,
+                    m.pos.x > m.walkTarget.x,
                     false,
                 )
             }
@@ -123,8 +123,8 @@ class MinionController(
         for (p in projectiles) {
             batch.draw(
                 projectileTexture,
-                p.pos.x,
-                p.pos.y,
+                p.pos.x - projectileTexture.width / 2f,
+                p.pos.y - projectileTexture.height / 2f,
                 projectileTexture.width / 2f,
                 projectileTexture.height / 2f,
                 projectileTexture.width.toFloat(),
