@@ -19,6 +19,9 @@ fun loadSkin(): Skin {
     val buttonPressedPatch = NinePatchDrawable(
         NinePatch(assetManager.get(AssetDescriptors.BUTTON_PRESSED), 6, 6, 6, 6)
     )
+    val framePatch = NinePatchDrawable(
+        NinePatch(assetManager.get(AssetDescriptors.FRAME), 12, 12, 6, 6)
+    )
 
     return skin.apply {
         label { font = textFont }
@@ -34,6 +37,11 @@ fun loadSkin(): Skin {
             down = buttonPatch
         }
 
+        visTextButton(extend = defaultStyle) {
+            up = buttonPatch
+            down = buttonPressedPatch
+        }
+
         visImageButton {
             up = buttonPatch
             down = buttonPressedPatch
@@ -46,6 +54,10 @@ fun loadSkin(): Skin {
 
         visTooltip {
             background = TextureRegionDrawable(assetManager.get(AssetDescriptors.FRAME))
+        }
+
+        window("dialog", extend = defaultStyle) {
+            background = framePatch
         }
     }
 }
