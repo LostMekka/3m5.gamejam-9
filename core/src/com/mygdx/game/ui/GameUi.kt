@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.widget.VisLabel
-import com.mygdx.game.GameState
+import com.mygdx.game.ResettableGameState
 import com.mygdx.game.MinionType
+import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import ktx.scene2d.*
@@ -25,7 +26,7 @@ fun initUi() {
     Scene2DSkin.defaultSkin = loadSkin()
 }
 
-private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: GameState) {
+private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: ResettableGameState) {
     flowGroup(vertical = false) {
         visTextButton("Repair") {
             onClick {
@@ -77,7 +78,7 @@ private fun @Scene2dDsl KWidget<Actor>.resources() {
     }
 }
 
-private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: GameState) {
+private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: ResettableGameState) {
     val minionTypeName = type.name.lowercase()
 
     visTable { table ->
@@ -144,7 +145,7 @@ data class FactoryLabels(
 //    val upgrade_squares: VisLabel?,
 )
 
-class GameUi(private val gameState: GameState) {
+class GameUi(private val gameState: PersistentGameState) {
     private val spriteBatch = SpriteBatch().apply {
         color = Color.WHITE
     }
@@ -197,7 +198,7 @@ class GameUi(private val gameState: GameState) {
                     spacing = 20f
 
                     factoryHealth()
-                    repairButton(gameState)
+                    repairButton(gameState.resettableState)
                 }
 
                 resources()
@@ -211,13 +212,13 @@ class GameUi(private val gameState: GameState) {
                 spacing = 200f
 
                 visTable {
-                    factory(MinionType.Tank, gameState)
+                    factory(MinionType.Tank, gameState.resettableState)
 
                     row()
-                    factory(MinionType.Archer, gameState)
+                    factory(MinionType.Archer, gameState.resettableState)
 
                     row()
-                    factory(MinionType.Miner, gameState)
+                    factory(MinionType.Miner, gameState.resettableState)
                 }
 
                 flowGroup(vertical = true) {
@@ -229,7 +230,7 @@ class GameUi(private val gameState: GameState) {
                 }
 
                 visImageButton {
-                    onClick { gameState.onToggleDoorClicked() }
+                    onClick { gameState.resettableState.onToggleDoorClicked() }
 
                     visLabel("Switch")
                     // TODO Current state
@@ -249,21 +250,21 @@ class GameUi(private val gameState: GameState) {
     }
 
     fun update() {
-        factoryHp?.setText("${gameState.factoryHp.current} / ${gameState.factoryHp.total}")
-        res1?.setText(gameState.resourceInventory.triangles)
-        res2?.setText(gameState.resourceInventory.circles)
-        res3?.setText(gameState.resourceInventory.squares)
+        factoryHp?.setText("${gameState.resettableState.factoryHp.current} / ${gameState.resettableState.factoryHp.total}")
+        res1?.setText(gameState.resettableState.resourceInventory.triangles)
+        res2?.setText(gameState.resettableState.resourceInventory.circles)
+        res3?.setText(gameState.resettableState.resourceInventory.squares)
 
-        bossHp?.setText("${gameState.bossHp.current} / ${gameState.bossHp.total}")
-        bossLevel?.setText(gameState.bossLevel)
+        bossHp?.setText("${gameState.resettableState.bossHp.current} / ${gameState.resettableState.bossHp.total}")
+        bossLevel?.setText(gameState.resettableState.bossLevel)
 
         mapOf(
-            MinionType.Tank to gameState.tankMinionData,
-            MinionType.Archer to gameState.archerMinionData,
-            MinionType.Miner to gameState.minerMinionData,
+            MinionType.Tank to gameState.resettableState.tankMinionData,
+            MinionType.Archer to gameState.resettableState.archerMinionData,
+            MinionType.Miner to gameState.resettableState.minerMinionData,
         ).forEach { (type, data) ->
             factories[type].also {
-                val upgradeCost = gameState.getUpgradeCost(type)
+                val upgradeCost = gameState.resettableState.getUpgradeCost(type)
 
                 it?.level?.setText(data.factoryLevel)
                 it?.rate?.setText("")

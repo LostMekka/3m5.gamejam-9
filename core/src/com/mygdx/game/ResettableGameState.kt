@@ -5,7 +5,7 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class GameState(
+class ResettableGameState(
     var factoryHp: Hp = Hp(total = 1000),
     var doorIsOpen: Boolean = true,
 
@@ -91,10 +91,6 @@ class GameState(
                 }
             }
         }
-    }
-
-    fun onGGClicked() {
-        // TODO
     }
 
     fun onRepairClicked() {

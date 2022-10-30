@@ -8,7 +8,7 @@ enum class FightMode {
     DEFENCE
 }
 
-class BossFight(private val state: GameState) {
+class BossFight(private val state: ResettableGameState) {
     var fightMode = FightMode.NEUTRAL
     var baseDamage = 1
 
