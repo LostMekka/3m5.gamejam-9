@@ -27,8 +27,8 @@ class ResettableGameState(
     var sendOutTime = 0f;
     var roundTripShortening = 1f;
 
-    var basicAttack: Attack = Attack(1f,1f, null)
-    var waitAttack: Attack = Attack(0f, 1f,null)
+    var basicAttack: Attack = Attack(1f,0.2f, assetManager.get(AssetDescriptors.BOSS_ATTACK))
+    var waitAttack: Attack = Attack(0f, 0.2f,null)
     var bosses = mutableListOf(
         Boss(1, assetManager.get(AssetDescriptors.BOSS), "Bööööses Monster", listOf(basicAttack)),
         Boss(1, assetManager.get(AssetDescriptors.BOSS), "So Bööööses Monster", listOf(basicAttack, waitAttack))
