@@ -17,6 +17,7 @@ import com.mygdx.game.MinionType
 import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
+import com.mygdx.game.common.soundController
 import ktx.actors.onClick
 import ktx.actors.plusAssign
 import ktx.actors.stage
@@ -57,7 +58,10 @@ private fun @Scene2dDsl KWidget<Actor>.repairAndUpgradeButtons(gameState: Persis
             padLeft(22f)
             padBottom(4f)
             padTop(-4f)
-            onClick { openPopup() }
+            onClick {
+                soundController.playCommonButtonSound()
+                openPopup()
+            }
 
             label("Upgrades")
         }
@@ -374,7 +378,10 @@ class GameUi(private val gameState: PersistentGameState) {
 
                 visImageButton {
                     pad(4f, 30f, 16f, 30f)
-                    onClick { gameState.onGGPressed() }
+                    onClick {
+                        soundController.playGGButtonSound()
+                        gameState.onGGPressed()
+                    }
 
                     label("GG", style = "number")
                 }
