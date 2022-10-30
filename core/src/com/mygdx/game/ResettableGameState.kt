@@ -102,6 +102,10 @@ class ResettableGameState(
                 }
             }
         }
+        val mincount=minerMinionData.minionCountInside;
+        if (mincount>0){
+            factoryHp.heal((mincount/10*minerMinionData.attackMultiplier).toInt())
+        }
     }
 
     fun onRepairClicked() {
