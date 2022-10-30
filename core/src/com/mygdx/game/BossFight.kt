@@ -69,7 +69,7 @@ class BossFight(private val state: ResettableGameState) {
     }
 
     private fun bossAttack() {
-        soundController.playRandomHitSound()
+        soundController.playRandomBossSound()
         val newAttack = state.boss.nextAttack()
         var damage: Float = (bossBaseDamage(state.bossLevel) * newAttack.damage)
 

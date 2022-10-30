@@ -76,7 +76,7 @@ class MinionController(
         val attacks = gameState.resettableState.bossFightState.minionAttacksLastFrame
         if (attacks > 0 && attackCoolDown <= 0f && projectiles.size < maxProjectiles) {
             attackCoolDown = maxAttackCoolDown
-            soundController.playRandomHitSound()
+            soundController.playRandomArcherSound()
             val source = minionsByType.getValue(MinionType.Archer).randomOrNull()
             if (source != null) projectiles += Projectile(source.pos.cpy(), bossPos)
         }

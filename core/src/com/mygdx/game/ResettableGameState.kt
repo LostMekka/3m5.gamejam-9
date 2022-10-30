@@ -114,7 +114,7 @@ class ResettableGameState(
 
     fun onRepairClicked() {
         if (!canRepairFactory()) return
-        soundController.playRepairSound()
+        soundController.playRepairButtonSound()
         val repairAmount = min(factoryHp.missing, resourceInventory / factoryRepairCostPerHpPoint)
         resourceInventory -= factoryRepairCostPerHpPoint * repairAmount
         factoryHp.heal(repairAmount)
@@ -134,6 +134,7 @@ class ResettableGameState(
     }
 
     fun onUpgradeFactoryClicked(minionType: MinionType) {
+        soundController.playUpgradeButtonSound()
         if (!canUpgradeFactory(minionType)) return
         resourceInventory -= getUpgradeCost(minionType)
         factoryUpgradeCostCache -= minionType
@@ -156,6 +157,7 @@ class ResettableGameState(
     }
 
     fun onToggleDoorClicked() {
+        soundController.playCommonButtonSound()
         doorIsOpen = !doorIsOpen
     }
 

@@ -14,6 +14,7 @@ import com.mygdx.game.MinionType
 import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
+import com.mygdx.game.common.soundController
 import ktx.actors.onClick
 import ktx.actors.stage
 import ktx.scene2d.*
@@ -333,7 +334,10 @@ class GameUi(private val gameState: PersistentGameState) {
 
                 visImageButton {
                     pad(4f, 30f, 16f, 30f)
-                    onClick { gameState.onGGPressed() }
+                    onClick {
+                        soundController.playGGButtonSound()
+                        gameState.onGGPressed()
+                    }
 
                     label("GG", style = "number")
                 }

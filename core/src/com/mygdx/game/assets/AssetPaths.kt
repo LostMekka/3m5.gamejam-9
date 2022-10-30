@@ -17,6 +17,24 @@ class AssetPaths {
         const val punch4SoundPath = "sounds/punches/Punch12.ogg"
         const val punch5SoundPath = "sounds/punches/Punch13.ogg"
 
+        const val archer1SoundPath = "sounds/archer/Attack-Archer-Laser-1.ogg"
+        const val archer2SoundPath = "sounds/archer/Attack-Archer-Laser-2.ogg"
+        const val archer3SoundPath = "sounds/archer/Attack-Archer-Laser-3.ogg"
+        const val archer4SoundPath = "sounds/archer/Attack-Archer-Laser-4.ogg"
+        const val archer5SoundPath = "sounds/archer/Attack-Archer-Laser-5.ogg"
+        const val archer6SoundPath = "sounds/archer/Attack-Archer-Laser-6.ogg"
+
+        const val boss1SoundPath = "sounds/boss/Attack-Boss-Tackle-1.ogg"
+        const val boss2SoundPath = "sounds/boss/Attack-Boss-Tackle-2.ogg"
+        const val boss3SoundPath = "sounds/boss/Attack-Boss-Tackle-3.ogg"
+
+        const val buttonCommonSoundPath = "sounds/button/Button-Common.ogg"
+        const val buttonGGSoundPath = "sounds/button/Button-GG.ogg"
+        const val buttonRepairSoundPath = "sounds/button/Button-RepairFactory.ogg"
+        const val buttonUpgrade1SoundPath = "sounds/button/Button-Upgrade1.ogg"
+        const val buttonUpgrade2SoundPath = "sounds/button/Button-Upgrade2.ogg"
+
+
         const val background = "ui/backgrounds/background_3.png"
 
         const val circle = "ui/textures/gameplay/circle.png"

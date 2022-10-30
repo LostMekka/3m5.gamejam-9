@@ -23,6 +23,27 @@ object AssetDescriptors {
     val PUNCH_4_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch4SoundPath, Sound::class.java)
     val PUNCH_5_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch5SoundPath, Sound::class.java)
 
+    val ARCHER_1_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.archer1SoundPath, Sound::class.java)
+    val ARCHER_2_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.archer2SoundPath, Sound::class.java)
+    val ARCHER_3_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.archer3SoundPath, Sound::class.java)
+    val ARCHER_4_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.archer4SoundPath, Sound::class.java)
+    val ARCHER_5_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.archer5SoundPath, Sound::class.java)
+    val ARCHER_6_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.archer6SoundPath, Sound::class.java)
+
+    val BOSS_1_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.boss1SoundPath, Sound::class.java)
+    val BOSS_2_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.boss2SoundPath, Sound::class.java)
+    val BOSS_3_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.boss3SoundPath, Sound::class.java)
+
+    val BUTTON_COMMON_SOUND: AssetDescriptor<Sound> =
+        AssetDescriptor(AssetPaths.buttonCommonSoundPath, Sound::class.java)
+    val BUTTON_GG_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.buttonGGSoundPath, Sound::class.java)
+    val BUTTON_REPAIR_SOUND: AssetDescriptor<Sound> =
+        AssetDescriptor(AssetPaths.buttonRepairSoundPath, Sound::class.java)
+    val BUTTON_UPGRADE_1_SOUND: AssetDescriptor<Sound> =
+        AssetDescriptor(AssetPaths.buttonUpgrade1SoundPath, Sound::class.java)
+    val BUTTON_UPGRADE_2_SOUND: AssetDescriptor<Sound> =
+        AssetDescriptor(AssetPaths.buttonUpgrade2SoundPath, Sound::class.java)
+
     val REPAIR_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
 
     val GAME_MUSIC: AssetDescriptor<Music> = AssetDescriptor(AssetPaths.gameMusicPath, Music::class.java)
@@ -94,6 +115,20 @@ object AssetDescriptors {
         BOSS_ATTACK,
         BOSS_HIT,
         GAME_MUSIC,
+        ARCHER_1_SOUND,
+        ARCHER_2_SOUND,
+        ARCHER_3_SOUND,
+        ARCHER_4_SOUND,
+        ARCHER_5_SOUND,
+        ARCHER_6_SOUND,
+        BOSS_1_SOUND,
+        BOSS_2_SOUND,
+        BOSS_3_SOUND,
+        BUTTON_COMMON_SOUND,
+        BUTTON_GG_SOUND,
+        BUTTON_REPAIR_SOUND,
+        BUTTON_UPGRADE_1_SOUND,
+        BUTTON_UPGRADE_2_SOUND,
     )
 
     fun setGamePlay() {
