@@ -47,6 +47,7 @@ object AssetDescriptors {
     val MINION_ARCHER: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_proto, Texture::class.java)
     val MINION_TANK: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_tank, Texture::class.java)
     val MINION_WORKER: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_worker, Texture::class.java)
+    val BOSS: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.boss, Texture::class.java)
 
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
@@ -82,6 +83,7 @@ object AssetDescriptors {
         MINION_ARCHER,
         MINION_TANK,
         MINION_WORKER,
+        BOSS,
     )
 
     fun setGamePlay() {
