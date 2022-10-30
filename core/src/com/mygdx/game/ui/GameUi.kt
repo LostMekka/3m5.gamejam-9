@@ -12,7 +12,6 @@ import com.kotcrab.vis.ui.layout.FlowGroup
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.mygdx.game.MinionType
 import com.mygdx.game.PersistentGameState
-import com.mygdx.game.ResettableGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import ktx.actors.onClick
@@ -26,7 +25,7 @@ fun initUi() {
     Scene2DSkin.defaultSkin = loadSkin()
 }
 
-private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: ResettableGameState) {
+private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: PersistentGameState) {
     flowGroup(vertical = false) {
         visImageButton {
             name = "repair"
@@ -34,7 +33,7 @@ private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: ResettableGameSta
             padBottom(4f)
             padTop(-4f)
             onClick {
-                gameState.onRepairClicked()
+                gameState.resettableState.onRepairClicked()
             }
 
             flowGroup {
@@ -113,7 +112,7 @@ private fun @Scene2dDsl KWidget<Actor>.resources() {
     }
 }
 
-private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: ResettableGameState) {
+private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: PersistentGameState) {
     val minionTypeName = type.name.lowercase()
 
     visTable { table ->
@@ -132,7 +131,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
             it.fillX()
             it.fillY()
             it.pad(20f)
-            onClick { gameState.onUpgradeFactoryClicked(type) }
+            onClick { gameState.resettableState.onUpgradeFactoryClicked(type) }
 
             visTable {
                 pad(10f)
@@ -246,7 +245,7 @@ class GameUi(private val gameState: PersistentGameState) {
                     spacing = 20f
 
                     factoryHealth()
-                    repairButton(gameState.resettableState)
+                    repairButton(gameState)
                 }
             }
 
@@ -270,13 +269,13 @@ class GameUi(private val gameState: PersistentGameState) {
                 y = 700f
 
                 visTable {
-                    factory(MinionType.Tank, gameState.resettableState)
+                    factory(MinionType.Tank, gameState)
 
                     row()
-                    factory(MinionType.Archer, gameState.resettableState)
+                    factory(MinionType.Archer, gameState)
 
                     row()
-                    factory(MinionType.Miner, gameState.resettableState)
+                    factory(MinionType.Miner, gameState)
                 }
             }
 

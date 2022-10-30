@@ -2,7 +2,10 @@ package com.mygdx.game
 
 import kotlin.math.min
 
-class PersistentGameState {
+class PersistentGameState(
+
+
+) {
 
     var resettableState = ResettableGameState()
     private fun levelMediator():Int {
@@ -53,3 +56,9 @@ class PersistentGameState {
 
 
 }
+
+class MinionMultiplier(
+    val minionType: MinionType,
+    var attackMultiplier: Float = 1f,
+    var defenceMultiplier: Float = 1f
+)
