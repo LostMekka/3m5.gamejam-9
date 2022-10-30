@@ -1,6 +1,6 @@
 package com.mygdx.game
 
-import kotlin.math.max
+import kotlin.math.min
 
 class PersistentGameState {
 
@@ -23,7 +23,7 @@ class PersistentGameState {
 
     fun calculateFrame(delta: Float) {
         resettableState.calculateFrame(delta)
-        resettableState.factoryHp= Hp(levelMediator()*100,max(resettableState.factoryHp.current,levelMediator()*100))
+        resettableState.factoryHp= Hp(levelMediator()*100,min(resettableState.factoryHp.current,levelMediator()*100))
     }
 
 
