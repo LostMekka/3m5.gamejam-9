@@ -51,6 +51,8 @@ class MinionController(
     private val projectiles = LinkedList<Projectile>()
 
     fun update(delta: Float, gameState: PersistentGameState) {
+        soundCoolDown -= delta
+
         for ((type, minions) in minionsByType) {
             val newCount = min(ceil(gameState.resettableState[type].minionCountOutside).toInt(), maxMinionCount)
             val currentCount = minions.size
@@ -76,7 +78,7 @@ class MinionController(
         val attacks = gameState.resettableState.bossFightState.minionAttacksLastFrame
         if (attacks > 0 && attackCoolDown <= 0f && projectiles.size < maxProjectiles) {
             attackCoolDown = maxAttackCoolDown
-            soundController.playRandomArcherSound()
+            playAttackSound()
             val source = minionsByType.getValue(MinionType.Archer).randomOrNull()
             if (source != null) projectiles += Projectile(source.pos.cpy(), bossPos)
         }
@@ -87,6 +89,14 @@ class MinionController(
             val arrived = p.pos.moveTo(p.target, projectileSpeed * delta)
             if (arrived) iter.remove()
         }
+    }
+
+    private val soundTime = 0.17f
+    private var soundCoolDown = 0f
+    private fun playAttackSound() {
+        if (soundCoolDown > 0) return
+        soundCoolDown += soundTime * (Random.nextFloat() * 0.5f + 0.75f)
+        soundController.playRandomArcherSound()
     }
 
     private fun walkTarget(y: Float, r: Float = Random.nextFloat()) =
