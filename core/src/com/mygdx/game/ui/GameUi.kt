@@ -20,8 +20,6 @@ import ktx.actors.*
 import ktx.scene2d.vis.*
 
 fun initUi() {
-    val font = assetManager.get(AssetDescriptors.FONT)
-
     VisUI.load()
     Scene2DSkin.defaultSkin = loadSkin()
 }
@@ -58,21 +56,24 @@ private fun @Scene2dDsl KWidget<Actor>.resources() {
         flowGroup {
             spacing = 8f
 
-            visImage(Texture("triangle.png"))
+            visImage(assetManager.get(AssetDescriptors.TRIANGLE)) {
+                width = 10f
+                height = 10f
+            }
             visLabel("") { name = "res1" }
         }
 
         flowGroup {
             spacing = 8f
 
-            visImage(Texture("circle.png"))
+            visImage(assetManager.get(AssetDescriptors.CIRCLE))
             visLabel("") { name = "res2" }
         }
 
         flowGroup {
             spacing = 8f
 
-            visImage(Texture("square.png"))
+            visImage(assetManager.get(AssetDescriptors.PENTAGON))
             visLabel("") { name = "res3" }
         }
     }
@@ -88,7 +89,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
             visLabel("") { name = "factory_${minionTypeName}_rate" }
 
             it.minWidth(80f)
-            spacing = 10f
+            spacing = -10f
         }
 
         visImageButton {
@@ -104,7 +105,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
             }
 
             visTooltip(visTable {
-                visImage(Texture("triangle.png")) { cell ->
+                visImage(assetManager.get(AssetDescriptors.TRIANGLE)) { cell ->
                     cell.width(20f)
                     cell.height(20f)
                     cell.padRight(10f)
@@ -112,7 +113,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
                 visLabel("") { name = "factory_${minionTypeName}_upgrade_res1" }
 
                 row()
-                visImage(Texture("circle.png")) { cell ->
+                visImage(assetManager.get(AssetDescriptors.CIRCLE)) { cell ->
                     cell.width(20f)
                     cell.height(20f)
                     cell.padRight(10f)
@@ -120,7 +121,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
                 visLabel("") { name = "factory_${minionTypeName}_upgrade_res2" }
 
                 row()
-                visImage(Texture("square.png")) { cell ->
+                visImage(assetManager.get(AssetDescriptors.PENTAGON)) { cell ->
                     cell.width(20f)
                     cell.height(20f)
                     cell.padRight(10f)
@@ -192,7 +193,7 @@ class GameUi(private val gameState: PersistentGameState) {
             flowGroup(vertical = true) {
                 x = 20f
                 y = stage.height - 20f
-                spacing = 600f
+                spacing = 400f
 
                 flowGroup(vertical = true) {
                     spacing = 20f
@@ -200,15 +201,26 @@ class GameUi(private val gameState: PersistentGameState) {
                     factoryHealth()
                     repairButton(gameState.resettableState)
                 }
+            }
+
+            flowGroup(vertical = true) {
+                width = 40f
+                x = (stage.width - it.width) / 2
+                y = stage.height - 20f
 
                 resources()
+            }
+
+            flowGroup(vertical = true) {
+                x = stage.width - 220f
+                y = stage.height - 20f
 
                 boss()
             }
 
             flowGroup(vertical = true) {
-                x = 200f
-                y = 600f
+                x = 160f
+                y = 700f
                 spacing = 200f
 
                 visTable {
@@ -244,8 +256,6 @@ class GameUi(private val gameState: PersistentGameState) {
                     visLabel("") { name = "count_miner_outside" }
                 }
             }
-
-
         }
     }
 
