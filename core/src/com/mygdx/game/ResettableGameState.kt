@@ -27,13 +27,15 @@ class ResettableGameState(
     var sendOutTime = 0f;
     var roundTripShortening = 1f;
 
-    var basicAttack: Attack = Attack(1f, null)
-    var waitAttack: Attack = Attack(0f, null)
+    var basicAttack: Attack = Attack(1f,1f, null)
+    var waitAttack: Attack = Attack(0f, 1f,null)
     var bosses = mutableListOf(
         Boss(1, assetManager.get(AssetDescriptors.BOSS), "Bööööses Monster", listOf(basicAttack)),
         Boss(1, assetManager.get(AssetDescriptors.BOSS), "So Bööööses Monster", listOf(basicAttack, waitAttack))
     )
     var boss: Boss = bosses.first()
+
+    var currentEffect=mutableListOf<Attack>()
 
     private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
 
@@ -149,4 +151,8 @@ class ResettableGameState(
     fun onToggleDoorClicked() {
         doorIsOpen = !doorIsOpen
     }
+
+
 }
+
+//class Effect(var time:Float=1f,var name:String)

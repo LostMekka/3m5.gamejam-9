@@ -47,7 +47,7 @@ class GameScreen : KtxScreen {
         batch.use {
             it.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.width.toFloat())
             minionController.draw(it)
-            bossController.display(it)
+            bossController.display(it,delta,gameState.resettableState.currentEffect)
         }
 
         ui.stage.draw()
