@@ -2,22 +2,33 @@ package com.mygdx.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.widget.VisLabel
-import com.mygdx.game.ResettableGameState
 import com.mygdx.game.MinionType
 import com.mygdx.game.PersistentGameState
+import com.mygdx.game.ResettableGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
-import ktx.scene2d.*
-import ktx.actors.*
-import ktx.scene2d.vis.*
+import ktx.actors.onClick
+import ktx.actors.stage
+import ktx.scene2d.KWidget
+import ktx.scene2d.Scene2DSkin
+import ktx.scene2d.Scene2dDsl
+import ktx.scene2d.actors
+import ktx.scene2d.vis.KVisTable
+import ktx.scene2d.vis.flowGroup
+import ktx.scene2d.vis.visImage
+import ktx.scene2d.vis.visImageButton
+import ktx.scene2d.vis.visLabel
+import ktx.scene2d.vis.visTable
+import ktx.scene2d.vis.visTextButton
+import ktx.scene2d.vis.visTooltip
 
 fun initUi() {
     VisUI.load()
@@ -104,32 +115,34 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
                 visLabel("Upgrade")
             }
 
-            visTooltip(visTable {
-                visImage(assetManager.get(AssetDescriptors.TRIANGLE)) { cell ->
-                    cell.width(20f)
-                    cell.height(20f)
-                    cell.padRight(10f)
-                }
-                visLabel("") { name = "factory_${minionTypeName}_upgrade_res1" }
+            visTooltip(
+                visTable {
+                    visImage(assetManager.get(AssetDescriptors.TRIANGLE)) { cell ->
+                        cell.width(20f)
+                        cell.height(20f)
+                        cell.padRight(10f)
+                    }
+                    visLabel("") { name = "factory_${minionTypeName}_upgrade_res1" }
 
-                row()
-                visImage(assetManager.get(AssetDescriptors.CIRCLE)) { cell ->
-                    cell.width(20f)
-                    cell.height(20f)
-                    cell.padRight(10f)
-                }
-                visLabel("") { name = "factory_${minionTypeName}_upgrade_res2" }
+                    row()
+                    visImage(assetManager.get(AssetDescriptors.CIRCLE)) { cell ->
+                        cell.width(20f)
+                        cell.height(20f)
+                        cell.padRight(10f)
+                    }
+                    visLabel("") { name = "factory_${minionTypeName}_upgrade_res2" }
 
-                row()
-                visImage(assetManager.get(AssetDescriptors.PENTAGON)) { cell ->
-                    cell.width(20f)
-                    cell.height(20f)
-                    cell.padRight(10f)
-                }
-                visLabel("") { name = "factory_${minionTypeName}_upgrade_res3" }
+                    row()
+                    visImage(assetManager.get(AssetDescriptors.PENTAGON)) { cell ->
+                        cell.width(20f)
+                        cell.height(20f)
+                        cell.padRight(10f)
+                    }
+                    visLabel("") { name = "factory_${minionTypeName}_upgrade_res3" }
 
-                pad(10f)
-            })
+                    pad(10f)
+                },
+            )
         }
 
         table.fillX()
