@@ -2,10 +2,12 @@ package com.mygdx.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.layout.FlowGroup
@@ -127,7 +129,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Persisten
             spacing = -5f
         }
 
-        visImageButton {
+        visImageButton(style = "flipped") {
             it.fillX()
             it.fillY()
             it.pad(20f)
@@ -251,7 +253,7 @@ class GameUi(private val gameState: PersistentGameState) {
 
             flowGroup(vertical = true) {
                 width = 40f
-                x = (stage.width - 480f) / 2
+                x = 310f
                 y = stage.height - 20f
 
                 resources()
@@ -262,6 +264,27 @@ class GameUi(private val gameState: PersistentGameState) {
                 y = stage.height - 20f
 
                 boss()
+            }
+
+            flowGroup {
+                x = 130f
+                y = 690f
+
+                visTable {
+                    val ninePatch = NinePatchDrawable(
+                        NinePatch(assetManager.get(AssetDescriptors.FACTORY_BACKGROUND), 21, 21, 21, 21)
+                    )
+
+                    for (i in 1..3) {
+                        if (i != 1) row()
+
+                        visImage(ninePatch) {
+                            it.width(430f)
+                            it.height(160f)
+                            it.padBottom(60f)
+                        }
+                    }
+                }
             }
 
             flowGroup {
