@@ -109,6 +109,7 @@ class GameState(
     fun onUpgradeFactoryClicked(minionType: MinionType) {
         if (!canUpgradeFactory(minionType)) return
         resourceInventory -= getUpgradeCost(minionType)
+        factoryUpgradeCostCache -= minionType
         this[minionType].factoryLevel++
     }
 
