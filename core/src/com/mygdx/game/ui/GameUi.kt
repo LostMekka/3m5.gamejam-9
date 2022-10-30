@@ -208,7 +208,7 @@ class GameUi(private val gameState: GameState) {
             flowGroup(vertical = true) {
                 x = 200f
                 y = 600f
-                spacing = 500f
+                spacing = 200f
 
                 visTable {
                     factory(MinionType.Tank, gameState)
@@ -220,11 +220,27 @@ class GameUi(private val gameState: GameState) {
                     factory(MinionType.Miner, gameState)
                 }
 
+                flowGroup(vertical = true) {
+                    spacing = 70f
+
+                    visLabel("") { name = "count_tank_inside" }
+                    visLabel("") { name = "count_archer_inside" }
+                    visLabel("") { name = "count_miner_inside" }
+                }
+
                 visImageButton {
                     onClick { gameState.onToggleDoorClicked() }
 
                     visLabel("Switch")
                     // TODO Current state
+                }
+
+                flowGroup(vertical = true) {
+                    spacing = 70f
+
+                    visLabel("") { name = "count_tank_outside" }
+                    visLabel("") { name = "count_archer_outside" }
+                    visLabel("") { name = "count_miner_outside" }
                 }
             }
 
@@ -258,6 +274,11 @@ class GameUi(private val gameState: GameState) {
                     ?.setText(upgradeCost.circles)
                 findWidget<VisLabel>("factory_${type.name.lowercase()}_upgrade_res3")
                     ?.setText(upgradeCost.squares)
+
+                findWidget<VisLabel>("count_${type.name.lowercase()}_inside")
+                    ?.setText(data.minionCountInside.toInt())
+                findWidget<VisLabel>("count_${type.name.lowercase()}_outside")
+                    ?.setText(data.minionCountOutside.toInt())
 
                 // Can't do this :(
                 // it?.upgrade_triangles?.setText("t" + upgradeCost.triangles)
