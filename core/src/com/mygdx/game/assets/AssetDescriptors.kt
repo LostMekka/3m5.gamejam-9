@@ -4,16 +4,14 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import ktx.assets.Asset
 import ktx.collections.gdxArrayOf
-import org.w3c.dom.Text
 
 object AssetDescriptors {
 
     // === FONTS
-    val FONT: AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.fontPath, BitmapFont::class.java)
+    val NUMBER_FONT: AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.fontPath, BitmapFont::class.java)
+    val TEXT_FONT: AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.textFontPath, BitmapFont::class.java)
     // HP Fonts
     // counters
 
@@ -46,6 +44,8 @@ object AssetDescriptors {
     val PENTAGON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.pentagon, Texture::class.java)
     val TRIANGLE: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.triangle, Texture::class.java)
 
+    val FACTORY: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.factory, Texture::class.java)
+
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
 
@@ -61,7 +61,7 @@ object AssetDescriptors {
 
     // == all descriptors ==
     val ALL = gdxArrayOf<AssetDescriptor<*>>(
-        FONT,
+        NUMBER_FONT,
         TEST_SOUND,
         REPAIR_SOUND,
         BACKGROUND,
@@ -75,6 +75,8 @@ object AssetDescriptors {
         PUNCH_3_SOUND,
         PUNCH_4_SOUND,
         PUNCH_5_SOUND,
+        TEXT_FONT,
+        FACTORY
     )
 
     fun setGamePlay() {

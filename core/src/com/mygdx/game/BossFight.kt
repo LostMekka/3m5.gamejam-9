@@ -1,5 +1,6 @@
 package com.mygdx.game
 
+import com.mygdx.game.common.soundController
 import kotlin.math.*
 
 enum class FightMode {
@@ -26,6 +27,7 @@ class BossFight(private val state: ResettableGameState) {
         }
 
     fun minionAttack(): Boolean {
+        soundController.playRandomHitSound()
         val archerDamage = state.archerMinionData.minionCountOutside * state.archerMinionData.attackStrength
         val tankDamage = state.tankMinionData.minionCountOutside * state.tankMinionData.attackStrength
         val totalDamage = archerDamage + tankDamage
@@ -60,6 +62,7 @@ class BossFight(private val state: ResettableGameState) {
     }
 
     private fun bossAttack() {
+        soundController.playRandomHitSound()
         val newAttack = state.boss.nextAttack()
         var damage: Float = (bossBaseDamage(state.bossLevel) * newAttack.damage)
 

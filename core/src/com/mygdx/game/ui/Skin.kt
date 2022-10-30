@@ -10,6 +10,6 @@ fun loadSkin(): Skin {
     val skin = VisUI.getSkin()
 
     return skin.apply {
-        label { font = assetManager.get(AssetDescriptors.FONT) }
+        label { font = assetManager.get(AssetDescriptors.NUMBER_FONT) }
     }
 }
