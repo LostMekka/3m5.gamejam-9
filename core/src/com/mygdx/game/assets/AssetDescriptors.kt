@@ -50,8 +50,8 @@ object AssetDescriptors {
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
 
     // Buttons
-        // GG
-        // OPEN
+    // GG
+    // OPEN
     // Ressources (3x)
     // Minions (3x)
     // Boss (3x)
@@ -70,6 +70,11 @@ object AssetDescriptors {
         TRIANGLE,
         BUTTON,
         FRAME,
+        PUNCH_1_SOUND,
+        PUNCH_2_SOUND,
+        PUNCH_3_SOUND,
+        PUNCH_4_SOUND,
+        PUNCH_5_SOUND,
     )
 
     fun setGamePlay() {
