@@ -20,6 +20,12 @@ object AssetDescriptors {
     // === SOUNDS
     val TEST_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.testSoundPath, Sound::class.java)
 
+    val PUNCH_1_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch1SoundPath, Sound::class.java)
+    val PUNCH_2_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch2SoundPath, Sound::class.java)
+    val PUNCH_3_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch3SoundPath, Sound::class.java)
+    val PUNCH_4_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch4SoundPath, Sound::class.java)
+    val PUNCH_5_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch5SoundPath, Sound::class.java)
+
     // Click
     // repair
     // upgrade
