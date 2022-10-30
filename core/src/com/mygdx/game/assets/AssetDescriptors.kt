@@ -4,7 +4,6 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import ktx.assets.Asset
 import ktx.collections.gdxArrayOf
 
 object AssetDescriptors {
@@ -45,7 +44,9 @@ object AssetDescriptors {
     val TRIANGLE: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.triangle, Texture::class.java)
 
     val FACTORY: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.factory, Texture::class.java)
-    val MINION_PROTO: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_proto, Texture::class.java)
+    val MINION_ARCHER: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_proto, Texture::class.java)
+    val MINION_TANK: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_tank, Texture::class.java)
+    val MINION_WORKER: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_worker, Texture::class.java)
 
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
@@ -78,7 +79,9 @@ object AssetDescriptors {
         PUNCH_5_SOUND,
         TEXT_FONT,
         FACTORY,
-        MINION_PROTO,
+        MINION_ARCHER,
+        MINION_TANK,
+        MINION_WORKER,
     )
 
     fun setGamePlay() {
