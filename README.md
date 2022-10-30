@@ -9,6 +9,9 @@
 ![Blattgold](./assets/blattgold.png)
 </div>
 
+Screenshot:
+![Game preview](Screenshot.png)
+
 Credits gehen raus an:
 * https://opengameart.org/users/bevouliincom
 * https://wallpaper.dog/gearss
