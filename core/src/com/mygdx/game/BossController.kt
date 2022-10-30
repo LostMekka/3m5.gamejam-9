@@ -9,7 +9,7 @@ class BossController (var texture: Texture){
 
 
 fun updateBoss(newTexture: Texture){texture=newTexture}
-var effect_time=0f
+
 fun display (batch: SpriteBatch,delta:Float,effects:MutableList<Attack>){
     if (effects.size>0){
         batch.draw(
@@ -19,8 +19,11 @@ fun display (batch: SpriteBatch,delta:Float,effects:MutableList<Attack>){
             texture.width/4f,
             texture.height/4f,
         )
-        effects.get(0).time-=delta
-        if (effects.get(0).time<=0) effects.removeFirst();
+        effects.get(0).time2-=delta
+        if (effects.get(0).time2<=0) {
+            effects.get(0).time2=effects.get(0).time
+            effects.removeFirst()
+        }
     }else {
 
 
