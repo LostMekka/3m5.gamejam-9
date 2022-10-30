@@ -21,6 +21,18 @@ class PersistentGameState {
         resettableState.resourceInventory.squares = squares
     }
 
+    fun onUpgradeBaseAttack(minionType: MinionType){
+        resettableState[minionType].attackStrength*= 1.2f
+    }
+
+    fun onUpgradeDefence(minionType: MinionType){
+        resettableState[minionType].defence*= 1.2f
+    }
+
+    fun onUpgradeRoundtrip(){
+        resettableState.roundTripShortening*=0.9f;
+    }
+
     fun calculateFrame(delta: Float) {
         resettableState.calculateFrame(delta)
         resettableState.factoryHp= Hp(levelMediator()*100,min(resettableState.factoryHp.current,levelMediator()*100))

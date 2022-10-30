@@ -23,6 +23,8 @@ class ResettableGameState(
 
     var lastMiningUpdate = 0f
     var timeBetweenIncomingMiners: Float? = null
+    var sendOutTime = 0f;
+    var roundTripShortening = 1f;
 
     var basicAttack: Attack = Attack(1f, null)
     var waitAttack: Attack = Attack(0f, null)
@@ -65,7 +67,6 @@ class ResettableGameState(
         bossFightState.update(delta)
     }
 
-    var sendOutTime = 0f;
 
     private fun calculateMiningFrame(delta: Float) {
         val minionCountOutside = minerMinionData.minionCountOutside
@@ -78,7 +79,7 @@ class ResettableGameState(
         if (doorIsOpen) {
             timeBetweenIncomingMiners = when (minionCountOutside) {
                 0f -> null
-                else -> baseMinerRoundTripTime / minionCountOutside
+                else -> baseMinerRoundTripTime*roundTripShortening / minionCountOutside
             }
         }
 

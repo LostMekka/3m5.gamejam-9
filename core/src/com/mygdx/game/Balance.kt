@@ -18,6 +18,7 @@ fun bossBaseDamage(bossLevel: Int): Float = 0.5f * 1.15f.pow(bossLevel - 1)
 fun bossHealth(bossLevel: Int): Int = 20 * 1.15f.pow(bossLevel - 1).toInt()
 
 
+
 ////// FACTORY ////////////////////////////////
 fun factorySpeedForLevel(level: Int): Float = 0.1f * level
 val factoryRepairCostPerHpPoint = ResourcePackage(triangles = 1)
