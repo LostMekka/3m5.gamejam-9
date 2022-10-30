@@ -8,6 +8,7 @@ const val tankBaseAttack = 0f
 const val tankBaseDefense = 10f
 
 const val archerBaseAttack = 1f
+const val archerBaseAttackCooldownTime = 1f
 const val archerBaseDefense = 2f
 
 const val minerBaseDefense = 1f

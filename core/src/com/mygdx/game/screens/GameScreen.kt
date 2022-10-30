@@ -28,10 +28,11 @@ class GameScreen : KtxScreen {
     private val tankTexture = assetManager.get(AssetDescriptors.MINION_TANK)
     private val archerTexture = assetManager.get(AssetDescriptors.MINION_ARCHER)
     private val minerTexture = assetManager.get(AssetDescriptors.MINION_WORKER)
+    private val projectileTexture = assetManager.get(AssetDescriptors.PROJECTILE)
 
     var gameState = PersistentGameState()
     private val ui = GameUi(gameState)
-    private val minionController = MinionController(tankTexture, archerTexture, minerTexture)
+    private val minionController = MinionController(tankTexture, archerTexture, minerTexture, projectileTexture)
     val bossController=BossController(gameState.resettableState.boss.image)
 
     override fun render(delta: Float) {

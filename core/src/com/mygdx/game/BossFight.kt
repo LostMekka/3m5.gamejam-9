@@ -28,21 +28,28 @@ class BossFight(private val state: ResettableGameState) {
             FightMode.OFFENCE -> 2f
         }
 
-    fun minionAttack(): Boolean {
-        soundController.playRandomHitSound()
-        val archerDamage = state.archerMinionData.minionCountOutside * state.archerMinionData.attackStrength
-        val tankDamage = state.tankMinionData.minionCountOutside * state.tankMinionData.attackStrength
-        val totalDamage = archerDamage + tankDamage
-        if (totalDamage > 0) {
-            state.currentEffect.add(Attack(1f,0.2f,0.2f,assetManager.get(AssetDescriptors.BOSS_ATTACK)))
-            val bossIsDead = state.bossHp.damage((totalDamage * fightModeAttackMultiplier).roundToInt())
-            if (bossIsDead) {
-                giveLoot()
-                respawnBoss()
-                return true
-            }
+    var lastMinionAttack = 0f
+    var minionAttacksLastFrame = 0
+    fun minionAttack(delta: Float) {
+        minionAttacksLastFrame = 0
+        val archerCount = state.archerMinionData.minionCountOutside
+        if (archerCount <= 0) return
+        lastMinionAttack += delta
+        val minionAttackTime = archerBaseAttackCooldownTime / archerCount
+        if (lastMinionAttack < minionAttackTime) return
+
+        val attackCount = (lastMinionAttack / minionAttackTime).toInt()
+        lastMinionAttack -= attackCount * minionAttackTime
+        minionAttacksLastFrame = attackCount
+        if (attackCount <= 0) return
+
+        val totalDamage = attackCount * state.archerMinionData.attackStrength
+        state.currentEffect.add(Attack(1f,0.2f,0.2f,assetManager.get(AssetDescriptors.BOSS_ATTACK)))
+        val bossIsDead = state.bossHp.damage((totalDamage * fightModeAttackMultiplier).roundToInt())
+        if (bossIsDead) {
+            giveLoot()
+            respawnBoss()
         }
-        return false
     }
 
     fun respawnBoss() {
@@ -69,7 +76,6 @@ class BossFight(private val state: ResettableGameState) {
         state.currentEffect.add(newAttack)
 
         for (minionType in MinionType.values()) {
-
             val factor = when (minionType) {
                 MinionType.Miner -> 1f / state[minionType].defence
                 else -> fightModeDefenseMultiplier / state[minionType].defence
@@ -94,13 +100,15 @@ class BossFight(private val state: ResettableGameState) {
     var fightRoundLength = 1f
     private var lastFightUpdate = 0f
     fun update(delta: Float) {
+        minionAttack(delta)
+
         factoryNotAttackedSince += delta
         lastFightUpdate += delta
         if (lastFightUpdate < fightRoundLength) return
-        lastFightUpdate = 0f
+        lastFightUpdate -= fightRoundLength
 
         if (factoryNotAttackedSince > 10f) state.factoryHp.heal(5)
-        if (!minionAttack()) bossAttack()
+        bossAttack()
 
         val mincount=state.minerMinionData.minionCountInside;
         if (mincount>0&&!state.factoryHp.isFull){
