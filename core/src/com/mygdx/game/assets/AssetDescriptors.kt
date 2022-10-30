@@ -53,6 +53,7 @@ object AssetDescriptors {
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
     val BUTTON_PRESSED: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button_pressed, Texture::class.java)
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
+    val FACTORY_BACKGROUND: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.factory_bg, Texture::class.java)
 
     // Buttons
     // GG
@@ -83,6 +84,7 @@ object AssetDescriptors {
         MINION_TANK,
         MINION_WORKER,
         BOSS,
+        FACTORY_BACKGROUND,
     )
 
     fun setGamePlay() {
