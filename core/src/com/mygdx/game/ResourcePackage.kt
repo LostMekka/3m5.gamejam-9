@@ -36,6 +36,6 @@ data class ResourcePackage(
         )
 
     fun negative():Boolean{
-        return triangles<0||circles<0||squares<0
+        return triangles<0||circles<0||pentas<0
     }
 }
