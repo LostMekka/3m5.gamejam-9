@@ -10,6 +10,7 @@ import com.mygdx.game.MinionController
 import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
+import com.mygdx.game.common.soundController
 import com.mygdx.game.ui.GameUi
 import ktx.app.KtxScreen
 import ktx.graphics.use
@@ -36,6 +37,8 @@ class GameScreen : KtxScreen {
     override fun render(delta: Float) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
         val modifiedDelta = delta * 1f
+
+        soundController.playGameMusic()
 
         ui.stage.act()
         gameState.calculateFrame(modifiedDelta)

@@ -16,6 +16,8 @@ class SoundController {
     private val punch4Sound: Sound = assetManager.get(AssetDescriptors.PUNCH_4_SOUND)
     private val punch5Sound: Sound = assetManager.get(AssetDescriptors.PUNCH_5_SOUND)
 
+    private val gameMusic: Sound = assetManager.get(AssetDescriptors.GAME_MUSIC)
+
     private val volume = 1f
 
     // === play sound methods
@@ -49,5 +51,9 @@ class SoundController {
             punch4Sound,
             punch5Sound,
         ).random().play()
+    }
+
+    fun playGameMusic() {
+        gameMusic.loop(volume * 0.66f)
     }
 }

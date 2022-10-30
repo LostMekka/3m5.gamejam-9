@@ -9,6 +9,8 @@ class AssetPaths {
         const val repairSoundPath = "sounds/Bell1.ogg"
         const val swipeSoundPath = "sounds/Swipe18.ogg"
 
+        const val gameMusicPath = "sounds/TeamBlattgold-MusicLoop.ogg"
+
         const val punch1SoundPath = "sounds/punches/Punch4.ogg"
         const val punch2SoundPath = "sounds/punches/Punch10.ogg"
         const val punch3SoundPath = "sounds/punches/Punch11.ogg"

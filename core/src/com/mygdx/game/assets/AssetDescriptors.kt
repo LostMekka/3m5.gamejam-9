@@ -24,6 +24,8 @@ object AssetDescriptors {
 
     val REPAIR_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
 
+    val GAME_MUSIC: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.gameMusicPath, Sound::class.java)
+
     // Click
     // repair
     // upgrade
@@ -90,6 +92,7 @@ object AssetDescriptors {
         PROJECTILE,
         BOSS_ATTACK,
         BOSS_HIT,
+        GAME_MUSIC,
     )
 
     fun setGamePlay() {
