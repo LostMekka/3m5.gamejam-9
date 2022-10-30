@@ -67,7 +67,7 @@ class SoundController {
             archer4Sound,
             archer5Sound,
             archer6Sound,
-        ).random().play(volume * 0.50f)
+        ).random().play(volume * 0.333f)
     }
 
     fun playAnyRandomSound() {
