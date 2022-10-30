@@ -1,12 +1,10 @@
-package com.mygdx.game.screens
+package com.mygdx.game
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.mygdx.game.MinionType
-import com.mygdx.game.PersistentGameState
 import java.util.LinkedList
 import kotlin.math.ceil
 import kotlin.math.min
