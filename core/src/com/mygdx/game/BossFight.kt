@@ -5,22 +5,21 @@ import kotlin.math.*
 enum class FightMode {
     NEUTRAL,
     OFFENCE,
-    DEFENCE
+    DEFENCE,
 }
 
 class BossFight(private val state: ResettableGameState) {
     var fightMode = FightMode.NEUTRAL
-    var baseDamage = 4
 
-    private val fightModeAttackMultiplier get() =
-        when (fightMode) {
+    private val fightModeAttackMultiplier
+        get() = when (fightMode) {
             FightMode.NEUTRAL -> 1f
             FightMode.DEFENCE -> 0.5f
             FightMode.OFFENCE -> 2f
         }
 
-    private val fightModeDefenseMultiplier get() =
-        when (fightMode) {
+    private val fightModeDefenseMultiplier
+        get() = when (fightMode) {
             FightMode.NEUTRAL -> 1f
             FightMode.DEFENCE -> 0.5f
             FightMode.OFFENCE -> 2f
@@ -50,8 +49,8 @@ class BossFight(private val state: ResettableGameState) {
             ?: state.bosses.random()
     }
 
-    val nextBossLoot get() =
-        ResourcePackage(
+    val nextBossLoot
+        get() = ResourcePackage(
             circles = state.bossLevel,
             squares = state.bossLevel / 10,
         )
@@ -60,13 +59,12 @@ class BossFight(private val state: ResettableGameState) {
         state.resourceInventory += nextBossLoot
     }
 
-    private fun baseBossDamage(bossLevel: Int) = bossLevel * baseDamage
+    private fun baseBossDamage(bossLevel: Int) = 4 * 1.2f.pow(bossLevel - 1)
 
     private fun bossAttack() {
         val newAttack = state.boss.nextAttack()
-        var damage: Float = (baseBossDamage(state.boss.level) * newAttack.damage)
+        var damage: Float = (baseBossDamage(state.bossLevel) * newAttack.damage)
 
-        if (state.archerMinionData.minionCountOutside>0)
         for (minionType in MinionType.values()) {
             val factor = when (minionType) {
                 MinionType.Miner -> 1f / state[minionType].defence
