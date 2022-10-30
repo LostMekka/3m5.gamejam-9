@@ -10,7 +10,7 @@ enum class FightMode {
 
 class BossFight(private val state: ResettableGameState) {
     var fightMode = FightMode.NEUTRAL
-    var baseDamage = 1
+    var baseDamage = 4
 
     private val fightModeAttackMultiplier get() =
         when (fightMode) {
@@ -66,13 +66,14 @@ class BossFight(private val state: ResettableGameState) {
         val newAttack = state.boss.nextAttack()
         var damage: Float = (baseBossDamage(state.boss.level) * newAttack.damage)
 
+        if (state.archerMinionData.minionCountOutside>0)
         for (minionType in MinionType.values()) {
             val factor = when (minionType) {
                 MinionType.Miner -> 1f / state[minionType].defence
                 else -> fightModeDefenseMultiplier / state[minionType].defence
             }
-            val damageDealt = min(damage * factor, state.tankMinionData.minionCountOutside)
-            state.tankMinionData.minionCountOutside -= damageDealt
+            val damageDealt = min(damage * factor, state[minionType].minionCountOutside)
+            state[minionType].minionCountOutside -= damageDealt
             damage -= damageDealt / factor
             if (damage <= 0f) return
         }
