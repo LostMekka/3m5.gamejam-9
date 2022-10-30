@@ -8,3 +8,15 @@ Source:
 # Files: src/*
 # Copyright: $YEAR $NAME <$CONTACT>
 # License: ...
+
+Files: core/src/com/mygdx/game/* core/src/com/mygdx/game/**/* desktop/src/com/mygdx/game/DesktopLauncher.java
+Copyright: 2022 3m5. GameJam 9 Team Blattgold
+License: MIT
+
+Files: .editorconfig .gitattributes .gitignore README.md Screenshot.png build.gradle core/build.gradle desktop/build.gradle settings.gradle gradle.properties
+Copyright: 2022 3m5. GameJam 9 Team Blattgold
+License: CC0-1.0
+
+Files: gradlew gradlew.bat gradle/* gradle/**
+Copyright: Gradle contributors
+License: Apache-2.0
