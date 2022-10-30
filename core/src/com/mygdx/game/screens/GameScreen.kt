@@ -25,6 +25,7 @@ class GameScreen : KtxScreen {
     }
 
     private val background = assetManager.get(AssetDescriptors.BACKGROUND)
+    private val triangleTexture = assetManager.get(AssetDescriptors.TRIANGLE)
     private val tankTexture = assetManager.get(AssetDescriptors.MINION_TANK)
     private val archerTexture = assetManager.get(AssetDescriptors.MINION_ARCHER)
     private val minerTexture = assetManager.get(AssetDescriptors.MINION_WORKER)
@@ -50,6 +51,44 @@ class GameScreen : KtxScreen {
 
         batch.use {
             it.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.width.toFloat())
+            repeat(5) { i ->
+                it.draw(
+                    triangleTexture,
+                    Gdx.graphics.width * (0.6f + 0.07f * i),
+                    35f,
+                    triangleTexture.width / 2f,
+                    triangleTexture.height / 2f,
+                    triangleTexture.width.toFloat(),
+                    triangleTexture.height.toFloat(),
+                    1f,
+                    1f,
+                    0f,
+                    0,
+                    0,
+                    triangleTexture.width,
+                    triangleTexture.height,
+                    i % 2 == 0,
+                    false,
+                )
+                if (i != 0) it.draw(
+                    triangleTexture,
+                    Gdx.graphics.width * (0.6f + 0.07f * (i - 0.5f)),
+                    70f,
+                    triangleTexture.width / 2f,
+                    triangleTexture.height / 2f,
+                    triangleTexture.width.toFloat(),
+                    triangleTexture.height.toFloat(),
+                    1f,
+                    1f,
+                    0f,
+                    0,
+                    0,
+                    triangleTexture.width,
+                    triangleTexture.height,
+                    i % 2 == 0,
+                    false,
+                )
+            }
             minionController.draw(it)
             bossController.display(it,delta,gameState.resettableState.currentEffect)
         }

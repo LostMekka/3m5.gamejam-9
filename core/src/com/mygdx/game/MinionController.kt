@@ -37,9 +37,9 @@ class MinionController(
     private val maxMinionCount = 200
 
     private val yByType = mapOf(
-        MinionType.Tank to Gdx.graphics.height * 0.55f,
-        MinionType.Archer to Gdx.graphics.height * 0.37f,
-        MinionType.Miner to Gdx.graphics.height * 0.12f,
+        MinionType.Tank to Gdx.graphics.height * 0.65f,
+        MinionType.Archer to Gdx.graphics.height * 0.45f,
+        MinionType.Miner to Gdx.graphics.height * 0.20f,
     )
     private val textureByType = mapOf(
         MinionType.Tank to tankTexture,
@@ -103,7 +103,7 @@ class MinionController(
                 batch.draw(
                     m.texture,
                     x - m.texture.width / 2f,
-                    y - m.texture.width / 2f,
+                    y - m.texture.height / 2f,
                     m.texture.width / 2f,
                     m.texture.height / 2f,
                     m.texture.width.toFloat(),
