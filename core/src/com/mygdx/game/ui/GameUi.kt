@@ -2,6 +2,7 @@ package com.mygdx.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
@@ -10,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.mygdx.game.GameState
+import com.mygdx.game.MinionType
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import ktx.scene2d.*
@@ -42,30 +44,105 @@ private fun @Scene2dDsl KWidget<Actor>.factoryHealth() {
 private fun @Scene2dDsl KWidget<Actor>.boss() {
     flowGroup(vertical = false) {
         visLabel("") { name = "bossHp" }
-        visLabel("1") { name = "bossLevel" }
+        visLabel("") { name = "bossLevel" }
 
         spacing = 10f
     }
 }
 
-
-private fun @Scene2dDsl KWidget<Actor>.resources(stage: Stage) {
+private fun @Scene2dDsl KWidget<Actor>.resources() {
     flowGroup {
         spacing = 20f
 
         flowGroup {
+            spacing = 8f
+
+            visImage(Texture("triangle.png"))
             visLabel("") { name = "res1" }
         }
 
         flowGroup {
+            spacing = 8f
+
+            visImage(Texture("circle.png"))
             visLabel("") { name = "res2" }
         }
 
         flowGroup {
+            spacing = 8f
+
+            visImage(Texture("square.png"))
             visLabel("") { name = "res3" }
         }
     }
 }
+
+private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: GameState) {
+    val minionTypeName = type.name.lowercase()
+
+    visTable { table ->
+        flowGroup(vertical = true) {
+            visLabel(type.name) { name = "factory_${minionTypeName}_name" }
+            visLabel("") { name = "factory_${minionTypeName}_level" }
+            visLabel("") { name = "factory_${minionTypeName}_rate" }
+
+            it.minWidth(80f)
+            spacing = 10f
+        }
+
+        visImageButton {
+            it.fillX()
+            it.fillY()
+            it.pad(20f)
+            onClick { gameState.onUpgradeFactoryClicked(type) }
+
+            visTable {
+                pad(10f)
+
+                visLabel("Upgrade")
+            }
+
+            visTooltip(visTable {
+                visImage(Texture("triangle.png")) { cell ->
+                    cell.width(20f)
+                    cell.height(20f)
+                    cell.padRight(10f)
+                }
+                visLabel("") { name = "factory_${minionTypeName}_upgrade_res1" }
+
+                row()
+                visImage(Texture("circle.png")) { cell ->
+                    cell.width(20f)
+                    cell.height(20f)
+                    cell.padRight(10f)
+                }
+                visLabel("") { name = "factory_${minionTypeName}_upgrade_res2" }
+
+                row()
+                visImage(Texture("square.png")) { cell ->
+                    cell.width(20f)
+                    cell.height(20f)
+                    cell.padRight(10f)
+                }
+                visLabel("") { name = "factory_${minionTypeName}_upgrade_res3" }
+
+                pad(10f)
+            })
+        }
+
+        table.fillX()
+        table.padBottom(10f)
+    }
+}
+
+data class FactoryLabels(
+    val name: VisLabel?,
+    val level: VisLabel?,
+    val rate: VisLabel?,
+//    val upgrade_triangles: VisLabel?,
+//    val upgrade_circles: VisLabel?,
+//    val upgrade_squares: VisLabel?,
+)
 
 class GameUi(private val gameState: GameState) {
     private val spriteBatch = SpriteBatch().apply {
@@ -75,9 +152,39 @@ class GameUi(private val gameState: GameState) {
 
     private val factoryHp by lazy { findWidget<VisLabel>("factoryHp") }
     private val bossHp by lazy { findWidget<VisLabel>("bossHp") }
+    private val bossLevel by lazy { findWidget<VisLabel>("bossLevel") }
     private val res1 by lazy { findWidget<VisLabel>("res1") }
     private val res2 by lazy { findWidget<VisLabel>("res2") }
     private val res3 by lazy { findWidget<VisLabel>("res3") }
+
+    private val factories by lazy {
+        mapOf(
+            MinionType.Tank to FactoryLabels(
+                name = findWidget<VisLabel>("factory_tank_name"),
+                level = findWidget<VisLabel>("factory_tank_level"),
+                rate = findWidget<VisLabel>("factory_tank_rate"),
+//                upgrade_triangles = findWidget<VisLabel>("factory_tank_upgrade_res1"),
+//                upgrade_circles = findWidget<VisLabel>("factory_tank_upgrade_res2"),
+//                upgrade_squares = findWidget<VisLabel>("factory_tank_upgrade_res3"),
+            ),
+            MinionType.Archer to FactoryLabels(
+                name = findWidget<VisLabel>("factory_archer_name"),
+                level = findWidget<VisLabel>("factory_archer_level"),
+                rate = findWidget<VisLabel>("factory_archer_rate"),
+//                upgrade_triangles = findWidget<VisLabel>("factory_archer_upgrade_res1"),
+//                upgrade_circles = findWidget<VisLabel>("factory_archer_upgrade_res2"),
+//                upgrade_squares = findWidget<VisLabel>("factory_archer_upgrade_res3"),
+            ),
+            MinionType.Miner to FactoryLabels(
+                name = findWidget<VisLabel>("factory_miner_name"),
+                level = findWidget<VisLabel>("factory_miner_level"),
+                rate = findWidget<VisLabel>("factory_miner_rate"),
+//                upgrade_triangles = findWidget<VisLabel>("factory_miner_upgrade_res1"),
+//                upgrade_circles = findWidget<VisLabel>("factory_miner_upgrade_res2"),
+//                upgrade_squares = findWidget<VisLabel>("factory_miner_upgrade_res3"),
+            ),
+        )
+    }
 
     init {
         stage.actors {
@@ -93,10 +200,35 @@ class GameUi(private val gameState: GameState) {
                     repairButton(gameState)
                 }
 
-                resources(stage)
+                resources()
 
                 boss()
             }
+
+            flowGroup(vertical = true) {
+                x = 200f
+                y = 600f
+                spacing = 500f
+
+                visTable {
+                    factory(MinionType.Tank, gameState)
+
+                    row()
+                    factory(MinionType.Archer, gameState)
+
+                    row()
+                    factory(MinionType.Miner, gameState)
+                }
+
+                visImageButton {
+                    onClick { gameState.onToggleDoorClicked() }
+
+                    visLabel("Switch")
+                    // TODO Current state
+                }
+            }
+
+
         }
     }
 
@@ -107,6 +239,32 @@ class GameUi(private val gameState: GameState) {
         res3?.setText(gameState.resourceInventory.squares)
 
         bossHp?.setText("${gameState.bossHp.current} / ${gameState.bossHp.total}")
+        bossLevel?.setText(gameState.bossLevel)
+
+        mapOf(
+            MinionType.Tank to gameState.tankMinionData,
+            MinionType.Archer to gameState.archerMinionData,
+            MinionType.Miner to gameState.minerMinionData,
+        ).forEach { (type, data) ->
+            factories[type].also {
+                val upgradeCost = gameState.getUpgradeCost(type)
+
+                it?.level?.setText(data.factoryLevel)
+                it?.rate?.setText("")
+
+                findWidget<VisLabel>("factory_${type.name.lowercase()}_upgrade_res1")
+                    ?.setText(upgradeCost.triangles)
+                findWidget<VisLabel>("factory_${type.name.lowercase()}_upgrade_res2")
+                    ?.setText(upgradeCost.circles)
+                findWidget<VisLabel>("factory_${type.name.lowercase()}_upgrade_res3")
+                    ?.setText(upgradeCost.squares)
+
+                // Can't do this :(
+                // it?.upgrade_triangles?.setText("t" + upgradeCost.triangles)
+                // it?.upgrade_circles?.setText("c" + upgradeCost.circles)
+                // it?.upgrade_squares?.setText("s" + upgradeCost.squares)
+            }
+        }
     }
 
     private fun <T : Actor?> findWidget(name: String): T? {
