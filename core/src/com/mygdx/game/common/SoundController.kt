@@ -1,5 +1,6 @@
 package com.mygdx.game.common
 
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
@@ -16,7 +17,7 @@ class SoundController {
     private val punch4Sound: Sound = assetManager.get(AssetDescriptors.PUNCH_4_SOUND)
     private val punch5Sound: Sound = assetManager.get(AssetDescriptors.PUNCH_5_SOUND)
 
-    private val gameMusic: Sound = assetManager.get(AssetDescriptors.GAME_MUSIC)
+    private val gameMusic: Music = assetManager.get(AssetDescriptors.GAME_MUSIC)
 
     private val volume = 1f
 
@@ -54,6 +55,8 @@ class SoundController {
     }
 
     fun playGameMusic() {
-        gameMusic.loop(volume * 0.66f)
+        gameMusic.volume = volume * 0.66f
+        gameMusic.isLooping = true
+        gameMusic.play()
     }
 }

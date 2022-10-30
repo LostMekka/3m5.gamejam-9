@@ -1,6 +1,7 @@
 package com.mygdx.game.assets
 
 import com.badlogic.gdx.assets.AssetDescriptor
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -24,7 +25,7 @@ object AssetDescriptors {
 
     val REPAIR_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
 
-    val GAME_MUSIC: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.gameMusicPath, Sound::class.java)
+    val GAME_MUSIC: AssetDescriptor<Music> = AssetDescriptor(AssetPaths.gameMusicPath, Music::class.java)
 
     // Click
     // repair
