@@ -1,8 +1,18 @@
 package com.mygdx.game
 
-class PersistentGameState {
-    var resettableState = ResettableGameState()
+import kotlin.math.max
 
+class PersistentGameState {
+
+    var resettableState = ResettableGameState()
+    private fun levelMediator():Int {
+        var sum=0
+        for(minionType in MinionType.values()){
+            sum+= resettableState[minionType].factoryLevel
+        }
+        return sum/3
+
+    }
     fun onGGPressed() {
         // TODO: animation?
         // TODO: sound?
@@ -13,5 +23,8 @@ class PersistentGameState {
 
     fun calculateFrame(delta: Float) {
         resettableState.calculateFrame(delta)
+        resettableState.factoryHp= Hp(levelMediator()*100,max(resettableState.factoryHp.current,levelMediator()*100))
     }
+
+
 }

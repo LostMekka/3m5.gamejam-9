@@ -6,7 +6,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 
 class ResettableGameState(
-    var factoryHp: Hp = Hp(total = 1000),
+    var factoryHp: Hp = Hp(total = 100),
     var doorIsOpen: Boolean = true,
 
     var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank, 2f, 4f),
