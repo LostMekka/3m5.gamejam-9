@@ -456,8 +456,10 @@ class GameUi(private val gameState: PersistentGameState) {
                     align(Align.bottomLeft)
                     padBottom(8f)
 
-                    visTextButton("Close") {
+                    visImageButton {
                         onClick { dialog.isVisible = false }
+
+                        visLabel("Close")
                     }
                 }
             }
