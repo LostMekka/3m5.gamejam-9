@@ -5,25 +5,23 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+
 class ResettableGameState(
     var factoryHp: Hp = Hp(total = 100),
     var doorIsOpen: Boolean = true,
 
-    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank, 2f, 4f),
-    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer, 4f, 2f),
-    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner, 0f, 1f),
+    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank, tankBaseAttack, tankBaseDefense),
+    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer, archerBaseAttack, archerBaseDefense),
+    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner, 0f, minerBaseDefense),
 
     var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 
     var bossLevel: Int = 1,
     var bossHp: Hp = Hp(total = 10),
 ) {
-    var factoryRepairCostPerHpPoint = ResourcePackage(triangles = 1)
-
-    var lastMiningUpdate = 0f
     var bossFightState: BossFight = BossFight(this)
 
-    val minerRoundTripTime = 10f
+    var lastMiningUpdate = 0f
     var timeBetweenIncomingMiners: Float? = null
 
     var basicAttack: Attack = Attack(1f, null)
@@ -80,7 +78,7 @@ class ResettableGameState(
         if (doorIsOpen) {
             timeBetweenIncomingMiners = when (minionCountOutside) {
                 0f -> null
-                else -> minerRoundTripTime / minionCountOutside
+                else -> baseMinerRoundTripTime / minionCountOutside
             }
         }
 
@@ -88,7 +86,7 @@ class ResettableGameState(
         lastMiningUpdate += delta;
 
         val targetTime = timeBetweenIncomingMiners
-        if (targetTime != null && lastMiningUpdate >= targetTime && sendOutTime > minerRoundTripTime) {
+        if (targetTime != null && lastMiningUpdate >= targetTime && sendOutTime > baseMinerRoundTripTime) {
             val amount = (lastMiningUpdate / targetTime).toInt()
             lastMiningUpdate -= targetTime * amount
             resourceInventory.triangles += amount
@@ -146,16 +144,4 @@ class ResettableGameState(
     fun onToggleDoorClicked() {
         doorIsOpen = !doorIsOpen
     }
-}
-
-fun factorySpeedForLevel(level: Int): Float {
-    return 0.1f * level
-}
-
-fun factoryUpgradeCost(minionType: MinionType, level: Int): ResourcePackage {
-    return ResourcePackage(
-        triangles = (10 * 1.3.pow(level)).roundToInt(),
-        circles = 0,
-        squares = 0,
-    )
 }

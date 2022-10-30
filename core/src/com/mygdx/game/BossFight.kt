@@ -42,7 +42,7 @@ class BossFight(private val state: ResettableGameState) {
 
     fun respawnBoss() {
         state.bossLevel++
-        state.bossHp = Hp(10 * state.bossLevel)
+        state.bossHp = Hp(bossHealth(state.bossLevel))
         state.boss = state.bosses
             .filter { it.level == state.bossLevel }
             .randomOrNull()
@@ -59,11 +59,9 @@ class BossFight(private val state: ResettableGameState) {
         state.resourceInventory += nextBossLoot
     }
 
-    private fun baseBossDamage(bossLevel: Int) = 4 * 1.2f.pow(bossLevel - 1)
-
     private fun bossAttack() {
         val newAttack = state.boss.nextAttack()
-        var damage: Float = (baseBossDamage(state.bossLevel) * newAttack.damage)
+        var damage: Float = (bossBaseDamage(state.bossLevel) * newAttack.damage)
 
         for (minionType in MinionType.values()) {
             val factor = when (minionType) {
