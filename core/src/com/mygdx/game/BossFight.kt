@@ -52,8 +52,8 @@ class BossFight(private val state: GameState) {
 
     val nextBossLoot get() =
         ResourcePackage(
-            triangles = state.bossLevel,
-            circles = state.bossLevel / 10,
+            circles = state.bossLevel,
+            squares = state.bossLevel / 10,
         )
 
     private fun giveLoot() {

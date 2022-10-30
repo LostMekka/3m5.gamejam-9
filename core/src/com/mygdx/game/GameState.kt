@@ -27,8 +27,10 @@ class GameState(
     var timeBetweenIncomingMiners: Float? = null
 
     var basicAttack: Attack = Attack(1f, null)
+    var waitAttack: Attack = Attack(0f, null)
     var bosses = mutableListOf(
         Boss(1, "Hier könnte ihre Werbung stehen", "Bööööses Monster", listOf(basicAttack)),
+        Boss(1, "Hier könnte ihre Werbung stehen", "So Bööööses Monster", listOf(basicAttack,waitAttack))
     )
     var boss: Boss = bosses.first()
 
@@ -65,19 +67,27 @@ class GameState(
         fight.update(delta)
     }
 
+    var sendOutTime=0f;
+
     private fun calculateMiningFrame(delta: Float) {
-        if (!doorIsOpen && minerMinionData.minionCountOutside <= 0f) return
+        val minionCountOutside = minerMinionData.minionCountOutside
+        if (minionCountOutside<=0) {
+            sendOutTime=0f
+            lastMiningUpdate=0f
+        }
+        if (!doorIsOpen && minionCountOutside <= 0f) return
+
         if (doorIsOpen) {
-            val minionCountOutside = minerMinionData.minionCountOutside
             timeBetweenIncomingMiners = when (minionCountOutside) {
                 0f -> null
                 else -> minerRoundTripTime / minionCountOutside
             }
         }
 
+        sendOutTime+=delta
         lastMiningUpdate += delta;
         val targetTime = timeBetweenIncomingMiners
-        if (targetTime != null && lastMiningUpdate >= targetTime) {
+        if (targetTime != null && lastMiningUpdate >= targetTime&&sendOutTime>minerRoundTripTime) { //
             lastMiningUpdate -= targetTime
             resourceInventory.triangles++
             if (!doorIsOpen) {
