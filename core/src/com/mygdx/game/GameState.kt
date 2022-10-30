@@ -20,7 +20,7 @@ class GameState(
 
     var lastFightUpdate = 0f
     var lastMiningUpdate = 0f
-    var fight: Boss_Fight = Boss_Fight(this)
+    var fight: BossFight = BossFight(this)
     val fight_round_length = 1f
 
     val minerRoundTripTime = 10f
@@ -62,11 +62,7 @@ class GameState(
     }
 
     private fun calculateCombatFrame(delta: Float) {
-        lastFightUpdate += delta;
-        if (lastFightUpdate >= fight_round_length) {
-            lastFightUpdate = 0f
-            fight.round()
-        }
+        fight.update(delta)
     }
 
     private fun calculateMiningFrame(delta: Float) {
