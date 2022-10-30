@@ -15,7 +15,6 @@ import com.mygdx.game.PersistentGameState
 import com.mygdx.game.ResettableGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
-import ktx.actors.isShown
 import ktx.actors.onClick
 import ktx.actors.stage
 import ktx.scene2d.KWidget
@@ -332,7 +331,7 @@ class GameUi(private val gameState: PersistentGameState) {
         factoryHp?.setText("${gameState.resettableState.factoryHp.current} / ${gameState.resettableState.factoryHp.total}")
         res1?.setText(gameState.resettableState.resourceInventory.triangles)
         res2?.setText(gameState.resettableState.resourceInventory.circles)
-        res3?.setText(gameState.resettableState.resourceInventory.squares)
+        res3?.setText(gameState.resettableState.resourceInventory.pentas)
 
         bossHp?.setText("${gameState.resettableState.bossHp.current} / ${gameState.resettableState.bossHp.total}")
         bossLevel?.setText(gameState.resettableState.bossLevel)

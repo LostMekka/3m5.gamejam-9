@@ -16,9 +16,9 @@ class PersistentGameState {
     fun onGGPressed() {
         // TODO: animation?
         // TODO: sound?
-        val squares = resettableState.resourceInventory.squares
+        val pentas = resettableState.resourceInventory.pentas
         resettableState = ResettableGameState()
-        resettableState.resourceInventory.squares = squares
+        resettableState.resourceInventory.pentas = pentas
     }
 
     fun calculateFrame(delta: Float) {

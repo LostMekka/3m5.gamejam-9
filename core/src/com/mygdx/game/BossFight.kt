@@ -54,7 +54,7 @@ class BossFight(private val state: ResettableGameState) {
     private fun giveLoot() {
         state.resourceInventory += ResourcePackage(
             circles = bossLootCircles(state.bossLevel),
-            squares = bossLootPentas(state.bossLevel),
+            pentas = bossLootPentas(state.bossLevel),
         )
     }
 
