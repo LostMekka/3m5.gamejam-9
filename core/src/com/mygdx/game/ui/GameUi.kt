@@ -355,8 +355,6 @@ class GameUi(private val gameState: PersistentGameState) {
                 it?.upgrade_triangles?.setText(upgradeCost.triangles)
                 it?.upgrade_circles?.setText(upgradeCost.circles)
 
-                println("${it?.level?.x} / ${it?.level?.y}")
-
                 // TODO Find labels only once
                 findWidget<VisLabel>("count_${type.name.lowercase()}_inside")
                     ?.setText(ceil(data.minionCountInside).toInt())
