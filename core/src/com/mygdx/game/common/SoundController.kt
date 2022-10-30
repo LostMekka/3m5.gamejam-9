@@ -39,7 +39,7 @@ class SoundController {
             punch3Sound,
             punch4Sound,
             punch5Sound,
-        ).random().play()
+        ).random().play(volume * 0.66f)
     }
 
     fun playAnyRandomSound() {

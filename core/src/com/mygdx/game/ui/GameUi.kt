@@ -2,19 +2,23 @@ package com.mygdx.game.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.layout.FlowGroup
+import com.kotcrab.vis.ui.widget.VisDialog
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.mygdx.game.MinionType
 import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import ktx.actors.onClick
+import ktx.actors.plusAssign
 import ktx.actors.stage
 import ktx.scene2d.*
 import ktx.scene2d.vis.*
@@ -25,7 +29,7 @@ fun initUi() {
     Scene2DSkin.defaultSkin = loadSkin()
 }
 
-private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: PersistentGameState) {
+private fun @Scene2dDsl KWidget<Actor>.repairAndUpgradeButtons(gameState: PersistentGameState, openPopup: () -> Unit) {
     flowGroup(vertical = false) {
         visImageButton {
             name = "repair"
@@ -48,6 +52,17 @@ private fun @Scene2dDsl KWidget<Actor>.repairButton(gameState: PersistentGameSta
                 }
             }
         }
+
+        visImageButton {
+            padLeft(22f)
+            padBottom(4f)
+            padTop(-4f)
+            onClick { openPopup() }
+
+            label("Upgrades")
+        }
+
+        spacing = 20f
     }
 }
 
@@ -127,7 +142,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Persisten
             spacing = -5f
         }
 
-        visImageButton {
+        visImageButton(style = "flipped") {
             it.fillX()
             it.fillY()
             it.pad(20f)
@@ -245,13 +260,19 @@ class GameUi(private val gameState: PersistentGameState) {
                     spacing = 20f
 
                     factoryHealth()
-                    repairButton(gameState)
+                    repairAndUpgradeButtons(gameState) {
+                        stage.actors.forEach {
+                            if (it !is VisDialog || it.name != "upgrades_popup") return@forEach
+
+                            it.isVisible = true
+                        }
+                    }
                 }
             }
 
             flowGroup(vertical = true) {
                 width = 40f
-                x = (stage.width - 480f) / 2
+                x = 310f
                 y = stage.height - 20f
 
                 resources()
@@ -262,6 +283,27 @@ class GameUi(private val gameState: PersistentGameState) {
                 y = stage.height - 20f
 
                 boss()
+            }
+
+            flowGroup {
+                x = 130f
+                y = 690f
+
+                visTable {
+                    val ninePatch = NinePatchDrawable(
+                        NinePatch(assetManager.get(AssetDescriptors.FACTORY_BACKGROUND), 21, 21, 21, 21)
+                    )
+
+                    for (i in 1..3) {
+                        if (i != 1) row()
+
+                        visImage(ninePatch) {
+                            it.width(430f)
+                            it.height(160f)
+                            it.padBottom(60f)
+                        }
+                    }
+                }
             }
 
             flowGroup {
@@ -284,22 +326,7 @@ class GameUi(private val gameState: PersistentGameState) {
                 x = 660f
                 y = 730f
 
-                visLabel("In base")
-                flowGroup(vertical = true) {
-                    spacing = 160f
-
-                    visLabel("") { name = "count_tank_inside" }
-                    visLabel("") { name = "count_archer_inside" }
-                    visLabel("") { name = "count_miner_inside" }
-                }
-            }
-
-            flowGroup(vertical = false) {
-                spacing = 40f
-                x = 1160f
-                y = 730f
-
-                visLabel("Outside")
+                visLabel("Amount")
                 flowGroup(vertical = true) {
                     spacing = 160f
 
@@ -309,23 +336,37 @@ class GameUi(private val gameState: PersistentGameState) {
                 }
             }
 
+//            flowGroup(vertical = false) {
+//                spacing = 40f
+//                x = 1160f
+//                y = 730f
+//
+//                visLabel("")
+//                flowGroup(vertical = true) {
+//                    spacing = 160f
+//
+//                    visLabel("") { name = "count_tank_outside" }
+//                    visLabel("") { name = "count_archer_outside" }
+//                    visLabel("") { name = "count_miner_outside" }
+//                }
+//            }
 
-            flowGroup(vertical = true) {
-                x = 860f
-                y = 735f
-
-                visImageButton {
-                    onClick { gameState.resettableState.onToggleDoorClicked() }
-                    padLeft(22f)
-                    padRight(22f)
-                    padBottom(4f)
-                    padTop(-4f)
-
-                    visLabel("") {
-                        name = "gate"
-                    }
-                }
-            }
+//            flowGroup(vertical = true) {
+//                x = 860f
+//                y = 735f
+//
+//                visImageButton {
+//                    onClick { gameState.resettableState.onToggleDoorClicked() }
+//                    padLeft(22f)
+//                    padRight(22f)
+//                    padBottom(4f)
+//                    padTop(-4f)
+//
+//                    visLabel("") {
+//                        name = "gate"
+//                    }
+//                }
+//            }
 
             visTable {
                 x = 1432f
@@ -336,6 +377,36 @@ class GameUi(private val gameState: PersistentGameState) {
                     onClick { gameState.onGGPressed() }
 
                     label("GG", style = "number")
+                }
+            }
+
+            visDialog("", style = "dialog") {
+                val dialog = this
+                val margin = 100f
+
+                isVisible = false
+                x = margin
+                y = margin
+                height = stage.height - margin * 2
+                width = stage.width - margin * 2
+                name = "upgrades_popup"
+
+                contentTable += visTable {
+                    x = 20f
+                    y = 20f
+
+                    visLabel("Buy upgrades", style = "number")
+                    row()
+
+                    flowGroup(vertical = true) {
+
+                    }
+                }
+
+                buttonsTable += visTable {
+                    visTextButton("Close") {
+                        onClick { dialog.isVisible = false }
+                    }
                 }
             }
         }
