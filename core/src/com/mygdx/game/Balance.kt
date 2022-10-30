@@ -36,13 +36,13 @@ fun factoryUpgradeCost(minionType: MinionType, level: Int) =
 fun strengthUpgradeCost(minionType: MinionType,level: Float) =
     ResourcePackage(
         triangles =0,
-        squares = (1 * 1.5.pow(level.toDouble())).roundToInt(),
+        pentas = (1 * 1.5.pow(level.toDouble())).roundToInt(),
         circles = (5 * 1.5.pow(level.toDouble())).roundToInt(),
     )
 
 fun roundtripUpgradeCost(level: Float) =
     ResourcePackage(
         triangles =(1 * 1.2.pow(1/level.toDouble())).roundToInt(),
-        squares = (2 * 1.2.pow(1/level.toDouble())).roundToInt(),
+        pentas = (2 * 1.2.pow(1/level.toDouble())).roundToInt(),
         circles = (10 * 1.2.pow(1/level.toDouble())).roundToInt(),
     )
