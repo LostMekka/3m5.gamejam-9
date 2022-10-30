@@ -26,6 +26,7 @@ class AssetPaths {
         const val minion_tank = "ui/textures/gameplay/minion_tank.png"
         const val minion_worker = "ui/textures/gameplay/minion_worker.png"
         const val boss = "ui/textures/gameplay/boss.png"
+        const val projectile = "ui/textures/gameplay/projectile.png"
 
         const val button = "ui/textures/interface/button.png"
         const val button_pressed = "ui/textures/interface/button_pressed.png"
