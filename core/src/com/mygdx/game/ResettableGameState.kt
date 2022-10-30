@@ -69,6 +69,8 @@ class ResettableGameState(
 
 
     private fun calculateMiningFrame(delta: Float) {
+
+
         val minionCountOutside = minerMinionData.minionCountOutside
         if (minionCountOutside <= 0) {
             sendOutTime = 0f
@@ -102,10 +104,7 @@ class ResettableGameState(
                 }
             }
         }
-        val mincount=minerMinionData.minionCountInside;
-        if (mincount>0){
-            factoryHp.heal((mincount/10*minerMinionData.attackMultiplier).toInt())
-        }
+
     }
 
     fun onRepairClicked() {
