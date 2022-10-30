@@ -16,7 +16,9 @@ fun loadSkin(): Skin {
     val textFont = assetManager.get(AssetDescriptors.TEXT_FONT)
 
     return skin.apply {
-        label { font = textFont }
+        label {
+            font = textFont
+        }
         label("number") { font = numberFont }
 
         button {

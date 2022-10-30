@@ -17,10 +17,7 @@ import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import ktx.actors.onClick
 import ktx.actors.stage
-import ktx.scene2d.KWidget
-import ktx.scene2d.Scene2DSkin
-import ktx.scene2d.Scene2dDsl
-import ktx.scene2d.actors
+import ktx.scene2d.*
 import ktx.scene2d.vis.*
 import kotlin.math.ceil
 
@@ -71,45 +68,46 @@ private fun @Scene2dDsl KWidget<Actor>.boss() {
     }
 }
 
-private fun @Scene2dDsl KWidget<Actor>.background(stage: Stage) {
-    floatingGroup {
-        x = 0f
-        y = stage.height
-
-        visImage(assetManager.get(AssetDescriptors.BACKGROUND)) {
-            width = stage.width
-            height = stage.height
-        }
-
-        debug = true
-    }
-}
-
 private fun @Scene2dDsl KWidget<Actor>.resources() {
-    flowGroup {
-        spacing = 20f
+    floatingGroup {
+        flowGroup(vertical = true) {
+            spacing = 16f
 
-        flowGroup {
-            spacing = 8f
-
-            visImage(assetManager.get(AssetDescriptors.TRIANGLE)) {
-                width = 10f
-                height = 10f
+            visTable {
+                visImage(assetManager.get(AssetDescriptors.TRIANGLE)) { cell ->
+                    cell.padTop(5f)
+                    cell.width(36f)
+                    cell.height(36f)
+                }
             }
             visLabel("") { name = "res1" }
         }
 
-        flowGroup {
-            spacing = 8f
+        flowGroup(vertical = true) {
+            spacing = 16f
+            x = 200f
 
-            visImage(assetManager.get(AssetDescriptors.CIRCLE))
+            visTable {
+                visImage(assetManager.get(AssetDescriptors.CIRCLE)) { cell ->
+                    cell.padTop(5f)
+                    cell.width(36f)
+                    cell.height(36f)
+                }
+            }
             visLabel("") { name = "res2" }
         }
 
-        flowGroup {
-            spacing = 8f
+        flowGroup(vertical = true) {
+            spacing = 16f
+            x = 400f
 
-            visImage(assetManager.get(AssetDescriptors.PENTAGON))
+            visTable {
+                visImage(assetManager.get(AssetDescriptors.PENTAGON)) { cell ->
+                    cell.padTop(5f)
+                    cell.width(36f)
+                    cell.height(36f)
+                }
+            }
             visLabel("") { name = "res3" }
         }
     }
@@ -127,7 +125,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
             }
 
             it.minWidth(180f)
-            spacing = -10f
+            spacing = -5f
         }
 
         visImageButton {
@@ -177,7 +175,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Resettabl
         }
 
         table.fillX()
-        table.padBottom(10f)
+        table.padBottom(50f)
     }
 }
 
@@ -239,8 +237,6 @@ class GameUi(private val gameState: PersistentGameState) {
 
     init {
         stage.actors {
-            background(stage)
-
             flowGroup(vertical = true) {
                 x = 20f
                 y = stage.height - 20f
@@ -256,7 +252,7 @@ class GameUi(private val gameState: PersistentGameState) {
 
             flowGroup(vertical = true) {
                 width = 40f
-                x = (stage.width - it.width) / 2
+                x = (stage.width - 480f) / 2
                 y = stage.height - 20f
 
                 resources()
@@ -285,32 +281,39 @@ class GameUi(private val gameState: PersistentGameState) {
             }
 
             flowGroup(vertical = false) {
-                spacing = 70f
+                spacing = 40f
                 x = 660f
-                y = 800f
+                y = 730f
 
                 visLabel("In base")
-                visLabel("") { name = "count_tank_inside" }
-                visLabel("") { name = "count_archer_inside" }
-                visLabel("") { name = "count_miner_inside" }
+                flowGroup(vertical = true) {
+                    spacing = 160f
+
+                    visLabel("") { name = "count_tank_inside" }
+                    visLabel("") { name = "count_archer_inside" }
+                    visLabel("") { name = "count_miner_inside" }
+                }
             }
 
             flowGroup(vertical = false) {
-                spacing = 70f
+                spacing = 40f
                 x = 1160f
-                y = 800f
+                y = 730f
 
                 visLabel("Outside")
-                visLabel("") { name = "count_tank_outside" }
-                visLabel("") { name = "count_archer_outside" }
-                visLabel("") { name = "count_miner_outside" }
+                flowGroup(vertical = true) {
+                    spacing = 160f
+
+                    visLabel("") { name = "count_tank_outside" }
+                    visLabel("") { name = "count_archer_outside" }
+                    visLabel("") { name = "count_miner_outside" }
+                }
             }
 
 
             flowGroup(vertical = true) {
                 x = 860f
-                y = 785f
-                spacing = 200f
+                y = 735f
 
                 visImageButton {
                     onClick { gameState.resettableState.onToggleDoorClicked() }
@@ -352,6 +355,7 @@ class GameUi(private val gameState: PersistentGameState) {
                 it?.upgrade_triangles?.setText(upgradeCost.triangles)
                 it?.upgrade_circles?.setText(upgradeCost.circles)
 
+                println("${it?.level?.x} / ${it?.level?.y}")
 
                 // TODO Find labels only once
                 findWidget<VisLabel>("count_${type.name.lowercase()}_inside")
