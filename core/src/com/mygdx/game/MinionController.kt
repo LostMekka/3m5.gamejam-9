@@ -103,7 +103,7 @@ class MinionController(
                 batch.draw(
                     m.texture,
                     x - m.texture.width / 2f,
-                    y - m.texture.width / 2f,
+                    y - m.texture.height / 2f,
                     m.texture.width / 2f,
                     m.texture.height / 2f,
                     m.texture.width.toFloat(),
