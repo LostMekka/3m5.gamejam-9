@@ -8,9 +8,9 @@ class GameState(
     var factoryHp: Hp = Hp(total = 1000),
     var doorIsOpen: Boolean = true,
 
-    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank,2,4),
-    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer,4,2),
-    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner,0,1),
+    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank, 2, 4),
+    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer, 4, 2),
+    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner, 0, 1),
 
     var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 
@@ -18,22 +18,19 @@ class GameState(
     var bossHp: Hp = Hp(total = 10),
 ) {
 
-    var lastFightUpdate=0f
-    var lastMiningUpdate=0f
-    var fight:Boss_Fight= Boss_Fight(this)
-    val fight_round_length=1f
-    val mining_round_length=0.5f
-    val rate=0.5f
+    var lastFightUpdate = 0f
+    var lastMiningUpdate = 0f
+    var fight: Boss_Fight = Boss_Fight(this)
+    val fight_round_length = 1f
 
-    var basicAttack:Attack= Attack(1f,null)
-    var bosses= mutableListOf<Boss>()
+    val minerRoundTripTime = 10f
+    var timeBetweenIncomingMiners: Float? = null
 
-    init {
-        bosses.add(Boss(1,"Hier könnte ihre Werbung stehen","Bööööses Monster", listOf(basicAttack)))
-
-    }
-    var boss:Boss=bosses.get(0)
-
+    var basicAttack: Attack = Attack(1f, null)
+    var bosses = mutableListOf(
+        Boss(1, "Hier könnte ihre Werbung stehen", "Bööööses Monster", listOf(basicAttack)),
+    )
+    var boss: Boss = bosses.first()
 
     private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
 
@@ -42,7 +39,6 @@ class GameState(
         MinionType.Archer -> archerMinionData
         MinionType.Miner -> minerMinionData
     }
-
 
     fun calculateFrame(delta: Float) {
         calculateFactoryFrame(delta)
@@ -66,21 +62,38 @@ class GameState(
     }
 
     private fun calculateCombatFrame(delta: Float) {
-        lastFightUpdate+=delta;
-        if (lastFightUpdate>=fight_round_length){
-            lastFightUpdate=0f
+        lastFightUpdate += delta;
+        if (lastFightUpdate >= fight_round_length) {
+            lastFightUpdate = 0f
             fight.round()
-
         }
     }
 
     private fun calculateMiningFrame(delta: Float) {
-        lastMiningUpdate+=delta;
-        if (lastMiningUpdate>=mining_round_length&&doorIsOpen){
-            lastMiningUpdate=0f
-            if (minerMinionData.minionCountOutside>0)
-            this.resourceInventory.triangles+=(rate*minerMinionData.minionCountOutside).toInt()
+        if (!doorIsOpen && minerMinionData.minionCountOutside <= 0f) return
+        if (doorIsOpen) {
+            val minionCountOutside = minerMinionData.minionCountOutside
+            timeBetweenIncomingMiners = when (minionCountOutside) {
+                0f -> null
+                else -> minerRoundTripTime / minionCountOutside
+            }
+        }
 
+        lastMiningUpdate += delta;
+        val targetTime = timeBetweenIncomingMiners
+        if (targetTime != null && lastMiningUpdate >= targetTime) {
+            lastMiningUpdate -= targetTime
+            resourceInventory.triangles++
+            if (!doorIsOpen) {
+                val newMinersOutside = minerMinionData.minionCountOutside - 1f
+                if (newMinersOutside < 0f) {
+                    minerMinionData.minionCountInside += minerMinionData.minionCountOutside
+                    minerMinionData.minionCountOutside = 0f
+                } else {
+                    minerMinionData.minionCountInside += 1f
+                    minerMinionData.minionCountOutside -= 1f
+                }
+            }
         }
     }
 
