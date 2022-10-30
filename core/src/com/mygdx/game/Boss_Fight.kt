@@ -1,6 +1,7 @@
 package com.mygdx.game
 
 import kotlin.math.*
+import kotlin.random.Random
 
 enum class Fightmode{
     NEUTRAL,
@@ -20,14 +21,7 @@ class Boss_Fight(val state:GameState) {
     var baseDammage=1
     var bossState=BossState.SPAWNING
 
-    var basicAttack:Attack= Attack(1f,null)
-    var bosses= mutableListOf<Boss>()
 
-    init {
-        bosses.add(Boss(1,"Hier könnte ihre Werbung stehen","Bööööses Monster", listOf(basicAttack)))
-
-    }
-    var boss:Boss=bosses.get(0)
 
 
 
@@ -61,6 +55,8 @@ class Boss_Fight(val state:GameState) {
         state.bossLevel=(state.archerMinionData.factoryLevel+state.tankMinionData.factoryLevel/2)
         state.bossHp.total=10*state.bossLevel
         state.bossHp.current=state.bossHp.total
+        val bosspos=state.bosses.filter{it.level==state.bossLevel}
+        state.boss=bosspos.get((0..bosspos.size-1).random())
     }
 
     fun giveLoot(){
@@ -78,8 +74,8 @@ class Boss_Fight(val state:GameState) {
             Fightmode.DEFENCE->0.5f
             Fightmode.OFFENCE->2f
         }
-        val newAttack=boss.nextAttack();
-        var dammage:Float= (boss.level*baseDammage*newAttack.dammage)
+        val newAttack=state.boss.nextAttack();
+        var dammage:Float= (state.boss.level*baseDammage*newAttack.dammage)
 
         if (state.tankMinionData.minionCountOutside>0){
             bossState=BossState.FIGHTERATTACK

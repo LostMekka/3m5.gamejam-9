@@ -25,6 +25,15 @@ class GameState(
     val mining_round_length=0.5f
     val rate=0.5f
 
+    var basicAttack:Attack= Attack(1f,null)
+    var bosses= mutableListOf<Boss>()
+
+    init {
+        bosses.add(Boss(1,"Hier könnte ihre Werbung stehen","Bööööses Monster", listOf(basicAttack)))
+
+    }
+    var boss:Boss=bosses.get(0)
+
 
     private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
 
