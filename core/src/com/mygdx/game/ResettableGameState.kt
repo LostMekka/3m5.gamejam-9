@@ -30,7 +30,7 @@ class ResettableGameState(
     var waitAttack: Attack = Attack(0f, null)
     var bosses = mutableListOf(
         Boss(1, "Hier könnte ihre Werbung stehen", "Bööööses Monster", listOf(basicAttack)),
-        Boss(1, "Hier könnte ihre Werbung stehen", "So Bööööses Monster", listOf(basicAttack,waitAttack))
+        Boss(1, "Hier könnte ihre Werbung stehen", "So Bööööses Monster", listOf(basicAttack, waitAttack))
     )
     var boss: Boss = bosses.first()
 
@@ -67,13 +67,13 @@ class ResettableGameState(
         bossFightState.update(delta)
     }
 
-    var sendOutTime=0f;
+    var sendOutTime = 0f;
 
     private fun calculateMiningFrame(delta: Float) {
         val minionCountOutside = minerMinionData.minionCountOutside
-        if (minionCountOutside<=0) {
-            sendOutTime=0f
-            lastMiningUpdate=0f
+        if (minionCountOutside <= 0) {
+            sendOutTime = 0f
+            lastMiningUpdate = 0f
         }
         if (!doorIsOpen && minionCountOutside <= 0f) return
 
@@ -84,21 +84,22 @@ class ResettableGameState(
             }
         }
 
-        sendOutTime+=delta
+        sendOutTime += delta
         lastMiningUpdate += delta;
 
         val targetTime = timeBetweenIncomingMiners
-        if (targetTime != null && lastMiningUpdate >= targetTime&&sendOutTime>minerRoundTripTime) { //
-            lastMiningUpdate -= targetTime
-            resourceInventory.triangles++
+        if (targetTime != null && lastMiningUpdate >= targetTime && sendOutTime > minerRoundTripTime) {
+            val amount = (lastMiningUpdate / targetTime).toInt()
+            lastMiningUpdate -= targetTime * amount
+            resourceInventory.triangles += amount
             if (!doorIsOpen) {
-                val newMinersOutside = minerMinionData.minionCountOutside - 1f
+                val newMinersOutside = minerMinionData.minionCountOutside - amount
                 if (newMinersOutside < 0f) {
                     minerMinionData.minionCountInside += minerMinionData.minionCountOutside
                     minerMinionData.minionCountOutside = 0f
                 } else {
-                    minerMinionData.minionCountInside += 1f
-                    minerMinionData.minionCountOutside -= 1f
+                    minerMinionData.minionCountInside += amount
+                    minerMinionData.minionCountOutside -= amount
                 }
             }
         }
