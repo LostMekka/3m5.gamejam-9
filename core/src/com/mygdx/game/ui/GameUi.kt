@@ -10,11 +10,15 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.widget.VisLabel
 import com.mygdx.game.GameState
+import com.mygdx.game.assetManager
+import com.mygdx.game.assets.AssetDescriptors
 import ktx.scene2d.*
 import ktx.actors.*
 import ktx.scene2d.vis.*
 
 fun initUi() {
+    val font = assetManager.get(AssetDescriptors.FONT)
+
     VisUI.load()
     Scene2DSkin.defaultSkin = loadSkin()
 }

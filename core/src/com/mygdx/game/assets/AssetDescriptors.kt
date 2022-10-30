@@ -42,7 +42,7 @@ object AssetDescriptors {
 
     // == all descriptors ==
     val ALL = gdxArrayOf<AssetDescriptor<*>>(
-        // FONT,
+        FONT,
         TEST_SOUND,
         REPAIR_SOUND,
     )
