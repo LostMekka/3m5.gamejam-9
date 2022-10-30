@@ -65,7 +65,7 @@ class ResettableGameState(
         bossFightState.update(delta)
     }
 
-    var sendOutTime = 0f;
+    var sendOutTime = 0f
 
     private fun calculateMiningFrame(delta: Float) {
         val minionCountOutside = minerMinionData.minionCountOutside
@@ -83,7 +83,7 @@ class ResettableGameState(
         }
 
         sendOutTime += delta
-        lastMiningUpdate += delta;
+        lastMiningUpdate += delta
 
         val targetTime = timeBetweenIncomingMiners
         if (targetTime != null && lastMiningUpdate >= targetTime && sendOutTime > baseMinerRoundTripTime) {
