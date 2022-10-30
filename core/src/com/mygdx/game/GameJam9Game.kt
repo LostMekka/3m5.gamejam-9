@@ -18,7 +18,7 @@ class MyGdxGame : KtxGame<Screen>() {
 
         addScreen(GameScreen())
         addScreen(SplashScreen(this))
-        setScreen<GameScreen>()
+        setScreen<SplashScreen>()
     }
 
     private fun loadAssets() {

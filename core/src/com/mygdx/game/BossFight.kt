@@ -118,7 +118,7 @@ class BossFight(private val state: ResettableGameState) {
     }
 }
 
-class Attack(val damage: Float, var time:Float, var time2:Float, var picture: Texture?)
+class Attack(val damage: Float, var time:Float, var time2:Float, var picture: Texture?,var expire:Float=1f)
 
 class Boss(val level: Int, val image: Texture, val name: String, val attacks: List<Attack>) {
     var currentAttackIndex = 0
