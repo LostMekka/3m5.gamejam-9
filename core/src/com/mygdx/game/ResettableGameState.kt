@@ -1,27 +1,27 @@
 package com.mygdx.game
 
 import com.mygdx.game.common.soundController
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class GameState(
+class ResettableGameState(
     var factoryHp: Hp = Hp(total = 1000),
     var doorIsOpen: Boolean = true,
 
-    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank, 2, 4),
-    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer, 4, 2),
-    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner, 0, 1),
+    var tankMinionData: MinionProduction = MinionProduction(MinionType.Tank, 2f, 4f),
+    var archerMinionData: MinionProduction = MinionProduction(MinionType.Archer, 4f, 2f),
+    var minerMinionData: MinionProduction = MinionProduction(MinionType.Miner, 0f, 1f),
 
     var resourceInventory: ResourcePackage = ResourcePackage(triangles = 100),
 
     var bossLevel: Int = 1,
     var bossHp: Hp = Hp(total = 10),
 ) {
+    var factoryRepairCostPerHpPoint = ResourcePackage(triangles = 1)
 
-    var lastFightUpdate = 0f
     var lastMiningUpdate = 0f
-    var fight: BossFight = BossFight(this)
-    val fight_round_length = 1f
+    var bossFightState: BossFight = BossFight(this)
 
     val minerRoundTripTime = 10f
     var timeBetweenIncomingMiners: Float? = null
@@ -64,7 +64,7 @@ class GameState(
     }
 
     private fun calculateCombatFrame(delta: Float) {
-        fight.update(delta)
+        bossFightState.update(delta)
     }
 
     var sendOutTime=0f;
@@ -86,6 +86,7 @@ class GameState(
 
         sendOutTime+=delta
         lastMiningUpdate += delta;
+
         val targetTime = timeBetweenIncomingMiners
         if (targetTime != null && lastMiningUpdate >= targetTime&&sendOutTime>minerRoundTripTime) { //
             lastMiningUpdate -= targetTime
@@ -103,27 +104,35 @@ class GameState(
         }
     }
 
-    fun onGGClicked() {
-        // TODO
-    }
-
     fun onRepairClicked() {
-        // TODO
+        if (!canRepairFactory()) return
         soundController.playRepairSound()
+        val repairAmount = min(factoryHp.missing, resourceInventory / factoryRepairCostPerHpPoint)
+        resourceInventory -= factoryRepairCostPerHpPoint * repairAmount
+        factoryHp.heal(repairAmount)
     }
 
-    fun canUpgradeFactory(minionType: MinionType): Boolean {
-        return getUpgradeCost(minionType) in resourceInventory
+    fun canRepairFactory(): Boolean {
+        return when {
+            factoryHp.isFull -> false
+            factoryRepairCostPerHpPoint !in resourceInventory -> false
+            else -> true
+        }
+    }
+
+    fun getFullRepairCost(): ResourcePackage {
+        return factoryRepairCostPerHpPoint * factoryHp.missing
     }
 
     fun onUpgradeFactoryClicked(minionType: MinionType) {
         if (!canUpgradeFactory(minionType)) return
         resourceInventory -= getUpgradeCost(minionType)
+        factoryUpgradeCostCache -= minionType
         this[minionType].factoryLevel++
     }
 
-    fun onToggleDoorClicked() {
-        doorIsOpen = !doorIsOpen
+    fun canUpgradeFactory(minionType: MinionType): Boolean {
+        return getUpgradeCost(minionType) in resourceInventory
     }
 
     fun getUpgradeCost(minionType: MinionType): ResourcePackage {
@@ -133,12 +142,8 @@ class GameState(
         }
     }
 
-    fun getRepairCost(): ResourcePackage {
-        return ResourcePackage(
-            triangles = 5 * factoryHp.missing,
-            circles = 0,
-            squares = 0,
-        )
+    fun onToggleDoorClicked() {
+        doorIsOpen = !doorIsOpen
     }
 }
 
