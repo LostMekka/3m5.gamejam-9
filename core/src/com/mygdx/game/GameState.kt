@@ -1,6 +1,7 @@
 package com.mygdx.game
 
 import com.mygdx.game.common.soundController
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
@@ -17,6 +18,7 @@ class GameState(
     var bossLevel: Int = 1,
     var bossHp: Hp = Hp(total = 10),
 ) {
+    var factoryRepairCostPerHpPoint = ResourcePackage(triangles = 1)
 
     var lastFightUpdate = 0f
     var lastMiningUpdate = 0f
@@ -98,12 +100,23 @@ class GameState(
     }
 
     fun onRepairClicked() {
-        // TODO
+        if (!canRepairFactory()) return
         soundController.playRepairSound()
+        val repairAmount = min(factoryHp.missing, resourceInventory / factoryRepairCostPerHpPoint)
+        resourceInventory -= factoryRepairCostPerHpPoint * repairAmount
+        factoryHp.heal(repairAmount)
     }
 
-    fun canUpgradeFactory(minionType: MinionType): Boolean {
-        return getUpgradeCost(minionType) in resourceInventory
+    fun canRepairFactory(): Boolean {
+        return when {
+            factoryHp.isFull -> false
+            factoryRepairCostPerHpPoint !in resourceInventory -> false
+            else -> true
+        }
+    }
+
+    fun getFullRepairCost(): ResourcePackage {
+        return factoryRepairCostPerHpPoint * factoryHp.missing
     }
 
     fun onUpgradeFactoryClicked(minionType: MinionType) {
@@ -113,8 +126,8 @@ class GameState(
         this[minionType].factoryLevel++
     }
 
-    fun onToggleDoorClicked() {
-        doorIsOpen = !doorIsOpen
+    fun canUpgradeFactory(minionType: MinionType): Boolean {
+        return getUpgradeCost(minionType) in resourceInventory
     }
 
     fun getUpgradeCost(minionType: MinionType): ResourcePackage {
@@ -124,12 +137,8 @@ class GameState(
         }
     }
 
-    fun getRepairCost(): ResourcePackage {
-        return ResourcePackage(
-            triangles = 5 * factoryHp.missing,
-            circles = 0,
-            squares = 0,
-        )
+    fun onToggleDoorClicked() {
+        doorIsOpen = !doorIsOpen
     }
 }
 

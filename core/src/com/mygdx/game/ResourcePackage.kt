@@ -20,4 +20,18 @@ data class ResourcePackage(
     operator fun contains(other: ResourcePackage): Boolean {
         return triangles >= other.triangles && circles >= other.circles && squares >= other.squares
     }
+
+    operator fun times(amount: Int) =
+        ResourcePackage(
+            triangles = triangles * amount,
+            circles = circles * amount,
+            squares = squares * amount,
+        )
+
+    operator fun div(other: ResourcePackage) =
+        minOf(
+            other.triangles.let { if (it == 0) Int.MAX_VALUE else triangles / it },
+            other.circles.let { if (it == 0) Int.MAX_VALUE else circles / it },
+            other.squares.let { if (it == 0) Int.MAX_VALUE else squares / it },
+        )
 }
