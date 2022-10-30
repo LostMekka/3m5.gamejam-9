@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import com.kotcrab.vis.ui.layout.FlowGroup
@@ -398,7 +399,9 @@ class GameUi(private val gameState: PersistentGameState) {
                 width = stage.width - margin * 2
                 name = "upgrades_popup"
 
-                contentTable += visTable {
+                contentTable += visTable(defaultSpacing = true) {
+                    setFillParent(true)
+                    align(Align.topLeft)
                     x = 20f
                     y = 20f
 
@@ -406,11 +409,53 @@ class GameUi(private val gameState: PersistentGameState) {
                     row()
 
                     flowGroup(vertical = true) {
+                        spacing = 35f
 
+                        visImageButton {
+                            onClick { gameState.onUpgradeDefence(MinionType.Tank) }
+
+                            visLabel(MinionType.Tank.name + " Defense +")
+                        }
+
+                        flowGroup {
+                            spacing = 20f
+
+                            visImageButton {
+                                onClick { gameState.onUpgradeDefence(MinionType.Archer) }
+
+                                visLabel(MinionType.Archer.name + " Defense +")
+                            }
+
+                            visImageButton {
+                                onClick { gameState.onUpgradeBaseAttack(MinionType.Archer) }
+
+                                visLabel(MinionType.Archer.name + " Attack +")
+                            }
+                        }
+
+                        flowGroup {
+                            spacing = 20f
+
+                            visImageButton {
+                                onClick { gameState.onUpgradeDefence(MinionType.Miner) }
+
+                                visLabel(MinionType.Miner.name + " Defense +")
+                            }
+
+                            visImageButton {
+                                onClick { gameState.onUpgradeRoundtrip() }
+
+                                visLabel(MinionType.Miner.name + " Roundtrip +")
+                            }
+                        }
                     }
                 }
 
                 buttonsTable += visTable {
+                    setFillParent(true)
+                    align(Align.bottomLeft)
+                    padBottom(8f)
+
                     visTextButton("Close") {
                         onClick { dialog.isVisible = false }
                     }
