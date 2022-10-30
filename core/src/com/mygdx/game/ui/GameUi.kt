@@ -58,7 +58,10 @@ private fun @Scene2dDsl KWidget<Actor>.repairAndUpgradeButtons(gameState: Persis
             padLeft(22f)
             padBottom(4f)
             padTop(-4f)
-            onClick { openPopup() }
+            onClick {
+                soundController.playCommonButtonSound()
+                openPopup()
+            }
 
             label("Upgrades")
         }
