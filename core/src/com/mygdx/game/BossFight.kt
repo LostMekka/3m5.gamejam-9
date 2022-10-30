@@ -8,7 +8,7 @@ enum class FightMode {
     DEFENCE
 }
 
-class BossFight(private val state: GameState) {
+class BossFight(private val state: ResettableGameState) {
     var fightMode = FightMode.NEUTRAL
     var baseDamage = 1
 
@@ -27,8 +27,8 @@ class BossFight(private val state: GameState) {
         }
 
     fun minionAttack(): Boolean {
-        val archerDamage = state.archerMinionData.minionCountOutside * state.archerMinionData.offence
-        val tankDamage = state.tankMinionData.minionCountOutside * state.tankMinionData.offence
+        val archerDamage = state.archerMinionData.minionCountOutside * state.archerMinionData.attackStrength
+        val tankDamage = state.tankMinionData.minionCountOutside * state.tankMinionData.attackStrength
         val totalDamage = archerDamage + tankDamage
         if (totalDamage > 0) {
             val bossIsDead = state.bossHp.damage((totalDamage * fightModeAttackMultiplier).roundToInt())

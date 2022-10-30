@@ -2,11 +2,10 @@ package com.mygdx.game.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.mygdx.game.GameState
+import com.mygdx.game.PersistentGameState
 import com.mygdx.game.ui.GameUi
 import ktx.app.KtxScreen
 import ktx.graphics.use
@@ -20,7 +19,7 @@ class GameScreen : KtxScreen {
         color = Color.WHITE
     }
 
-    var gameState = GameState()
+    var gameState = PersistentGameState()
     private val ui = GameUi(gameState)
 
 
