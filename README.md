@@ -9,3 +9,7 @@
 ![Blattgold](./assets/blattgold.png)
 </div>
 
+Credits gehen raus an:
+* https://opengameart.org/users/bevouliincom
+* https://wallpaper.dog/gearss
+* https://mounirtohami.itch.io/
