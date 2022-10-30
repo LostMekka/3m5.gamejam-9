@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import ktx.assets.Asset
 import ktx.collections.gdxArrayOf
 
 object AssetDescriptors {
@@ -11,8 +12,6 @@ object AssetDescriptors {
     // === FONTS
     val NUMBER_FONT: AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.fontPath, BitmapFont::class.java)
     val TEXT_FONT: AssetDescriptor<BitmapFont> = AssetDescriptor(AssetPaths.textFontPath, BitmapFont::class.java)
-    // HP Fonts
-    // counters
 
     // === SOUNDS
     val TEST_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.testSoundPath, Sound::class.java)
@@ -23,11 +22,12 @@ object AssetDescriptors {
     val PUNCH_4_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch4SoundPath, Sound::class.java)
     val PUNCH_5_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.punch5SoundPath, Sound::class.java)
 
+    val REPAIR_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
+
     // Click
     // repair
     // upgrade
     // collect ressources (3x)
-    val REPAIR_SOUND: AssetDescriptor<Sound> = AssetDescriptor(AssetPaths.repairSoundPath, Sound::class.java)
     // minion sounds (3x)
     // boss sounds
     // hits
@@ -48,6 +48,7 @@ object AssetDescriptors {
     val MINION_TANK: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_tank, Texture::class.java)
     val MINION_WORKER: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_worker, Texture::class.java)
     val BOSS: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.boss, Texture::class.java)
+    val PROJECTILE: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.projectile, Texture::class.java)
 
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
     val BUTTON_PRESSED: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button_pressed, Texture::class.java)
@@ -56,10 +57,6 @@ object AssetDescriptors {
     // Buttons
     // GG
     // OPEN
-    // Ressources (3x)
-    // Minions (3x)
-    // Boss (3x)
-    // Factory (3x)
     // Holding cell
     // Ressourcenübersicht
 
