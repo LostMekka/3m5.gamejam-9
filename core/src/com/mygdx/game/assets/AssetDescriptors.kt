@@ -45,6 +45,7 @@ object AssetDescriptors {
     val TRIANGLE: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.triangle, Texture::class.java)
 
     val FACTORY: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.factory, Texture::class.java)
+    val MINION_PROTO: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.minion_proto, Texture::class.java)
 
     val BUTTON: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.button, Texture::class.java)
     val FRAME: AssetDescriptor<Texture> = AssetDescriptor(AssetPaths.frame, Texture::class.java)
@@ -76,7 +77,8 @@ object AssetDescriptors {
         PUNCH_4_SOUND,
         PUNCH_5_SOUND,
         TEXT_FONT,
-        FACTORY
+        FACTORY,
+        MINION_PROTO,
     )
 
     fun setGamePlay() {

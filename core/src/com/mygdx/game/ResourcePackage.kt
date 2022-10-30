@@ -3,36 +3,36 @@ package com.mygdx.game
 data class ResourcePackage(
     var triangles: Int = 0,
     var circles: Int = 0,
-    var squares: Int = 0,
+    var pentas: Int = 0,
 ) {
     operator fun plusAssign(other: ResourcePackage) {
         triangles += other.triangles
         circles += other.circles
-        squares += other.squares
+        pentas += other.pentas
     }
 
     operator fun minusAssign(other: ResourcePackage) {
         triangles -= other.triangles
         circles -= other.circles
-        squares -= other.squares
+        pentas -= other.pentas
     }
 
     operator fun contains(other: ResourcePackage): Boolean {
-        return triangles >= other.triangles && circles >= other.circles && squares >= other.squares
+        return triangles >= other.triangles && circles >= other.circles && pentas >= other.pentas
     }
 
     operator fun times(amount: Int) =
         ResourcePackage(
             triangles = triangles * amount,
             circles = circles * amount,
-            squares = squares * amount,
+            pentas = pentas * amount,
         )
 
     operator fun div(other: ResourcePackage) =
         minOf(
             other.triangles.let { if (it == 0) Int.MAX_VALUE else triangles / it },
             other.circles.let { if (it == 0) Int.MAX_VALUE else circles / it },
-            other.squares.let { if (it == 0) Int.MAX_VALUE else squares / it },
+            other.pentas.let { if (it == 0) Int.MAX_VALUE else pentas / it },
         )
 
     fun negative():Boolean{

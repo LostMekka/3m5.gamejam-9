@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.mygdx.game.PersistentGameState
+import com.mygdx.game.assetManager
+import com.mygdx.game.assets.AssetDescriptors
 import com.mygdx.game.ui.GameUi
 import ktx.app.KtxScreen
 import ktx.graphics.use
@@ -30,6 +32,12 @@ class GameScreen : KtxScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
 
         ui.update()
+
+        val background = assetManager.get(AssetDescriptors.BACKGROUND)
+
+        ui.stage.batch.begin()
+        ui.stage.batch.draw(background, 0f, 0f, Gdx.graphics.width.toFloat(), Gdx.graphics.width.toFloat())
+        ui.stage.batch.end()
 
         batch.use {
 

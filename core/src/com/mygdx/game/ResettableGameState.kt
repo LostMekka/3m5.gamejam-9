@@ -84,7 +84,7 @@ class ResettableGameState(
         }
 
         sendOutTime += delta
-        lastMiningUpdate += delta;
+        lastMiningUpdate += delta
 
         val targetTime = timeBetweenIncomingMiners
         if (targetTime != null && lastMiningUpdate >= targetTime && sendOutTime > baseMinerRoundTripTime) {

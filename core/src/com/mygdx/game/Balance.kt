@@ -13,9 +13,12 @@ const val archerBaseDefense = 2f
 const val minerBaseDefense = 1f
 const val baseMinerRoundTripTime = 10f
 
+
 ////// BOSS ////////////////////////////////
 fun bossBaseDamage(bossLevel: Int): Float = 0.5f * 1.15f.pow(bossLevel - 1)
 fun bossHealth(bossLevel: Int): Int = 20 * 1.15f.pow(bossLevel - 1).toInt()
+fun bossLootCircles(bossLevel: Int) = (0.1f * bossLevel + 1).roundToInt()
+fun bossLootPentas(bossLevel: Int) = (0.2f * bossLevel).roundToInt()
 
 
 
@@ -23,11 +26,11 @@ fun bossHealth(bossLevel: Int): Int = 20 * 1.15f.pow(bossLevel - 1).toInt()
 fun factorySpeedForLevel(level: Int): Float = 0.1f * level
 val factoryRepairCostPerHpPoint = ResourcePackage(triangles = 1)
 
+@Suppress("UNUSED_PARAMETER")
 fun factoryUpgradeCost(minionType: MinionType, level: Int) =
     ResourcePackage(
-        triangles = (10 * 1.2.pow(level)).roundToInt(),
-        circles = 0,
-        squares = 0,
+        triangles = (8 * 1.2.pow(level - 1)).roundToInt(),
+        circles = (2 * 1.3.pow(level - 8)).roundToInt(),
     )
 
 fun strengthUpgradeCost(minionType: MinionType,level: Float) =
