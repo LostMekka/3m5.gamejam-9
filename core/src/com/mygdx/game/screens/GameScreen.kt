@@ -16,13 +16,8 @@ import ktx.app.KtxScreen
 import ktx.graphics.use
 
 class GameScreen : KtxScreen {
-    // Notice no `lateinit var` - ExampleScreen has no create()
-    // method and is constructed after libGDX is fully initiated
-    // in ExampleGame.create method.
-    val font = BitmapFont()
-    val batch = SpriteBatch().apply {
-        color = Color.WHITE
-    }
+    private val font = BitmapFont()
+    private val batch = SpriteBatch().apply { color = Color.WHITE }
 
     private val background = assetManager.get(AssetDescriptors.BACKGROUND)
     private val triangleTexture = assetManager.get(AssetDescriptors.TRIANGLE)
@@ -31,10 +26,16 @@ class GameScreen : KtxScreen {
     private val minerTexture = assetManager.get(AssetDescriptors.MINION_WORKER)
     private val projectileTexture = assetManager.get(AssetDescriptors.PROJECTILE)
 
-    var gameState = PersistentGameState()
-    private val ui = GameUi(gameState)
-    private val minionController = MinionController(tankTexture, archerTexture, minerTexture, projectileTexture)
-    val bossController=BossController(gameState.resettableState.boss.image)
+    private var gameState = PersistentGameState()
+    private val ui = GameUi(gameState, this)
+    private val minionController = MinionController(
+        tankTexture = tankTexture,
+        archerTexture = archerTexture,
+        minerTexture = minerTexture,
+        projectileTexture = projectileTexture,
+        triangleTexture = triangleTexture,
+    )
+    private val bossController = BossController(gameState.resettableState.boss.image)
 
     override fun render(delta: Float) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) Gdx.app.exit()
@@ -90,7 +91,7 @@ class GameScreen : KtxScreen {
                 )
             }
             minionController.draw(it)
-            bossController.display(it,delta,gameState.resettableState.currentEffect)
+            bossController.display(it, delta, gameState.resettableState.currentEffect)
         }
 
         ui.stage.draw()
@@ -104,5 +105,9 @@ class GameScreen : KtxScreen {
         // Will be automatically disposed of by the game instance.
         font.dispose()
         batch.dispose()
+    }
+
+    fun onGGPressed() {
+        minionController.reset()
     }
 }

@@ -19,6 +19,7 @@ import com.mygdx.game.PersistentGameState
 import com.mygdx.game.assetManager
 import com.mygdx.game.assets.AssetDescriptors
 import com.mygdx.game.common.soundController
+import com.mygdx.game.screens.GameScreen
 import ktx.actors.onClick
 import ktx.actors.plusAssign
 import ktx.actors.stage
@@ -208,7 +209,10 @@ data class FactoryLabels(
     val upgrade_circles_block: FlowGroup?,
 )
 
-class GameUi(private val gameState: PersistentGameState) {
+class GameUi(
+    private val gameState: PersistentGameState,
+    private val screen: GameScreen,
+) {
     private val spriteBatch = SpriteBatch().apply {
         color = Color.WHITE
     }
@@ -382,6 +386,7 @@ class GameUi(private val gameState: PersistentGameState) {
                     onClick {
                         soundController.playGGButtonSound()
                         gameState.onGGPressed()
+                        screen.onGGPressed()
                     }
 
                     label("GG", style = "number")
