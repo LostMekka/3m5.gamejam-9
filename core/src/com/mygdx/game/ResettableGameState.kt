@@ -27,15 +27,15 @@ class ResettableGameState(
     var sendOutTime = 0f;
     var roundTripShortening = 1f;
 
-    var basicAttack: Attack = Attack(1f,0.2f,0.2f, assetManager.get(AssetDescriptors.BOSS_HIT))
-    var waitAttack: Attack = Attack(0f, 0.2f,0.2f,null)
+    var basicAttack: Attack = Attack(1f, 0.2f, 0.2f, assetManager.get(AssetDescriptors.BOSS_HIT))
+    var waitAttack: Attack = Attack(0f, 0.2f, 0.2f, null)
     var bosses = mutableListOf(
         Boss(1, assetManager.get(AssetDescriptors.BOSS), "Bööööses Monster", listOf(basicAttack)),
-        Boss(1, assetManager.get(AssetDescriptors.BOSS), "So Bööööses Monster", listOf(basicAttack, waitAttack))
+        Boss(1, assetManager.get(AssetDescriptors.BOSS), "So Bööööses Monster", listOf(basicAttack, waitAttack)),
     )
     var boss: Boss = bosses.first()
 
-    var currentEffect=mutableListOf<Attack>()
+    var currentEffect = mutableListOf<Attack>()
 
     private val factoryUpgradeCostCache = mutableMapOf<MinionType, ResourcePackage>()
 
@@ -74,8 +74,6 @@ class ResettableGameState(
 
 
     private fun calculateMiningFrame(delta: Float) {
-
-
         val minionCountOutside = minerMinionData.minionCountOutside
         if (minionCountOutside <= 0) {
             sendOutTime = 0f
@@ -86,7 +84,7 @@ class ResettableGameState(
         if (doorIsOpen) {
             timeBetweenIncomingMiners = when (minionCountOutside) {
                 0f -> null
-                else -> baseMinerRoundTripTime*roundTripShortening / minionCountOutside
+                else -> baseMinerRoundTripTime * roundTripShortening / minionCountOutside
             }
         }
 
@@ -98,6 +96,7 @@ class ResettableGameState(
             val amount = (lastMiningUpdate / targetTime).toInt()
             lastMiningUpdate -= targetTime * amount
             resourceInventory.triangles += amount
+
             if (!doorIsOpen) {
                 val newMinersOutside = minerMinionData.minionCountOutside - amount
                 if (newMinersOutside < 0f) {
@@ -109,7 +108,6 @@ class ResettableGameState(
                 }
             }
         }
-
     }
 
     fun onRepairClicked() {
@@ -160,8 +158,6 @@ class ResettableGameState(
         soundController.playCommonButtonSound()
         doorIsOpen = !doorIsOpen
     }
-
-
 }
 
 //class Effect(var time:Float=1f,var name:String)
