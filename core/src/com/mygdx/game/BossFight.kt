@@ -43,8 +43,8 @@ class BossFight(private val state: ResettableGameState) {
         minionAttacksLastFrame = attackCount
         if (attackCount <= 0) return
 
-        val totalDamage = attackCount * state.archerMinionData.attackStrength
-        state.currentEffect.add(Attack(1f,0.2f,0.2f,assetManager.get(AssetDescriptors.BOSS_ATTACK)))
+        val totalDamage = attackCount * state.archerMinionData.attackStrength * state.archerMinionData.attackMultiplier
+        state.currentEffect.add(Attack(1f, 0.2f, 0.2f, assetManager.get(AssetDescriptors.BOSS_ATTACK)))
         val bossIsDead = state.bossHp.damage((totalDamage * fightModeAttackMultiplier).roundToInt())
         if (bossIsDead) {
             giveLoot()
@@ -78,7 +78,7 @@ class BossFight(private val state: ResettableGameState) {
         for (minionType in MinionType.values()) {
             val factor = when (minionType) {
                 MinionType.Miner -> 1f / state[minionType].defence
-                else -> fightModeDefenseMultiplier / state[minionType].defence
+                else -> fightModeDefenseMultiplier / (state[minionType].defence * state[minionType].defenceMultiplier)
             }
             val damageDealt = min(damage * factor, state[minionType].minionCountOutside)
             state[minionType].minionCountOutside -= damageDealt
@@ -87,9 +87,9 @@ class BossFight(private val state: ResettableGameState) {
         }
 
         factoryNotAttackedSince = 0f
-        var door =1f
-        if (!state.doorIsOpen)door=door/1.5f
-        if (state.factoryHp.damage(max(1,(damage*door).toInt()))) lost()
+        var door = 1f
+        if (!state.doorIsOpen) door = door / 1.5f
+        if (state.factoryHp.damage(max(1, (damage * door).toInt()))) lost()
     }
 
     fun lost() {
@@ -110,15 +110,15 @@ class BossFight(private val state: ResettableGameState) {
         if (factoryNotAttackedSince > 10f) state.factoryHp.heal(5)
         bossAttack()
 
-        val mincount=state.minerMinionData.minionCountInside;
-        if (mincount>0&&!state.factoryHp.isFull){
-            state.factoryHp.heal((mincount/50*state.minerMinionData.attackMultiplier).roundToInt())
-            if (state.tankMinionData.minionCountOutside<=0) state.minerMinionData.minionCountInside-=1
+        val mincount = state.minerMinionData.minionCountInside;
+        if (mincount > 0 && !state.factoryHp.isFull) {
+            state.factoryHp.heal((mincount / 50 * state.minerMinionData.attackMultiplier).roundToInt())
+            if (state.tankMinionData.minionCountOutside <= 0) state.minerMinionData.minionCountInside -= 1
         }
     }
 }
 
-class Attack(val damage: Float, var time:Float, var time2:Float, var picture: Texture?,var expire:Float=1f)
+class Attack(val damage: Float, var time: Float, var time2: Float, var picture: Texture?, var expire: Float = 1f)
 
 class Boss(val level: Int, val image: Texture, val name: String, val attacks: List<Attack>) {
     var currentAttackIndex = 0
@@ -130,4 +130,3 @@ class Boss(val level: Int, val image: Texture, val name: String, val attacks: Li
         return attack
     }
 }
-
