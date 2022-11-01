@@ -38,4 +38,8 @@ data class ResourcePackage(
     fun negative():Boolean{
         return triangles<0||circles<0||pentas<0
     }
+
+    override fun toString(): String {
+        return "△ $triangles | ◯ $circles | ⬠ $pentas"
+    }
 }
