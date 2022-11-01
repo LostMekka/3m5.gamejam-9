@@ -1,7 +1,9 @@
 package com.mygdx.game.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -65,7 +67,9 @@ private fun @Scene2dDsl KWidget<Actor>.repairAndUpgradeButtons(gameState: Persis
                 openPopup()
             }
 
-            label("Upgrades")
+            visLabel("Buy ")
+            visTable { visLabel("GG", style = "number") { it.pad(-20f, 0f, -3f, 0f) } }
+            visLabel(" upgrades")
         }
 
         spacing = 20f
@@ -88,18 +92,37 @@ private fun @Scene2dDsl KWidget<Actor>.boss() {
     }
 }
 
+enum class IconSize {
+    SMALL,
+    LARGE;
+
+    fun toFloat(): Float = when {
+        this == SMALL -> 24f
+        this == LARGE -> 36f
+        else -> 36f
+    }
+}
+
+private fun @Scene2dDsl KWidget<Actor>.icon(
+    size: IconSize,
+    texture: AssetDescriptor<Texture>,
+    paddingTop: Float = 0f
+) {
+    visTable {
+        visImage(assetManager.get(texture)) { cell ->
+            cell.padTop(paddingTop)
+            cell.width(size.toFloat())
+            cell.height(size.toFloat())
+        }
+    }
+}
+
 private fun @Scene2dDsl KWidget<Actor>.resources() {
     floatingGroup {
         flowGroup(vertical = true) {
             spacing = 16f
 
-            visTable {
-                visImage(assetManager.get(AssetDescriptors.TRIANGLE)) { cell ->
-                    cell.padTop(5f)
-                    cell.width(36f)
-                    cell.height(36f)
-                }
-            }
+            icon(IconSize.LARGE, AssetDescriptors.TRIANGLE, 5f)
             visLabel("") { name = "res1" }
         }
 
@@ -107,13 +130,7 @@ private fun @Scene2dDsl KWidget<Actor>.resources() {
             spacing = 16f
             x = 200f
 
-            visTable {
-                visImage(assetManager.get(AssetDescriptors.CIRCLE)) { cell ->
-                    cell.padTop(5f)
-                    cell.width(36f)
-                    cell.height(36f)
-                }
-            }
+            icon(IconSize.LARGE, AssetDescriptors.CIRCLE, 5f)
             visLabel("") { name = "res2" }
         }
 
@@ -121,13 +138,7 @@ private fun @Scene2dDsl KWidget<Actor>.resources() {
             spacing = 16f
             x = 400f
 
-            visTable {
-                visImage(assetManager.get(AssetDescriptors.PENTAGON)) { cell ->
-                    cell.padTop(5f)
-                    cell.width(36f)
-                    cell.height(36f)
-                }
-            }
+            icon(IconSize.LARGE, AssetDescriptors.PENTAGON, 5f)
             visLabel("") { name = "res3" }
         }
     }
@@ -140,7 +151,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Persisten
         flowGroup(vertical = true) {
             visLabel(type.name) { name = "factory_${minionTypeName}_name" }
             flowGroup {
-                visLabel("Lvl ")
+                visLabel("Prod.-Lvl ")
                 visLabel("") { name = "factory_${minionTypeName}_level" }
             }
 
@@ -167,13 +178,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Persisten
                         name = "factory_${minionTypeName}_upgrade_res1_block"
                         spacing = 2f
 
-                        visTable {
-                            visImage(assetManager.get(AssetDescriptors.TRIANGLE)) { cell ->
-                                cell.padTop(10f)
-                                cell.width(24f)
-                                cell.height(24f)
-                            }
-                        }
+                        icon(IconSize.SMALL, AssetDescriptors.TRIANGLE, 10f)
                         visLabel("") { name = "factory_${minionTypeName}_upgrade_res1" }
                     }
 
@@ -181,13 +186,7 @@ private fun @Scene2dDsl KVisTable.factory(type: MinionType, gameState: Persisten
                         name = "factory_${minionTypeName}_upgrade_res2_block"
                         spacing = 2f
 
-                        visTable {
-                            visImage(assetManager.get(AssetDescriptors.CIRCLE)) { cell ->
-                                cell.padTop(10f)
-                                cell.width(24f)
-                                cell.height(24f)
-                            }
-                        }
+                        icon(IconSize.SMALL, AssetDescriptors.CIRCLE, 10f)
                         visLabel("") { name = "factory_${minionTypeName}_upgrade_res2" }
                     }
                 }
@@ -207,6 +206,7 @@ data class FactoryLabels(
     val upgrade_triangles_block: FlowGroup?,
     val upgrade_circles: VisLabel?,
     val upgrade_circles_block: FlowGroup?,
+    val count: VisLabel?,
 )
 
 class GameUi(
@@ -218,13 +218,13 @@ class GameUi(
     }
     val stage = createStage()
 
+    // Labels for state of current round
     private val factoryHp by lazy { findWidget<VisLabel>("factoryHp") }
     private val bossHp by lazy { findWidget<VisLabel>("bossHp") }
     private val bossLevel by lazy { findWidget<VisLabel>("bossLevel") }
     private val res1 by lazy { findWidget<VisLabel>("res1") }
     private val res2 by lazy { findWidget<VisLabel>("res2") }
     private val res3 by lazy { findWidget<VisLabel>("res3") }
-    private val gate by lazy { findWidget<VisLabel>("gate") }
 
     private val factories by lazy {
         mapOf(
@@ -236,6 +236,7 @@ class GameUi(
                 upgrade_triangles_block = findWidget<FlowGroup>("factory_tank_upgrade_res1_block"),
                 upgrade_circles = findWidget<VisLabel>("factory_tank_upgrade_res2"),
                 upgrade_circles_block = findWidget<FlowGroup>("factory_tank_upgrade_res2_block"),
+                count = findWidget<VisLabel>("count_tank"),
             ),
             MinionType.Archer to FactoryLabels(
                 name = findWidget<VisLabel>("factory_archer_name"),
@@ -245,6 +246,7 @@ class GameUi(
                 upgrade_triangles_block = findWidget<FlowGroup>("factory_archer_upgrade_res1_block"),
                 upgrade_circles = findWidget<VisLabel>("factory_archer_upgrade_res2"),
                 upgrade_circles_block = findWidget<FlowGroup>("factory_archer_upgrade_res2_block"),
+                count = findWidget<VisLabel>("count_archer"),
             ),
             MinionType.Miner to FactoryLabels(
                 name = findWidget<VisLabel>("factory_miner_name"),
@@ -254,9 +256,22 @@ class GameUi(
                 upgrade_triangles_block = findWidget<FlowGroup>("factory_miner_upgrade_res1_block"),
                 upgrade_circles = findWidget<VisLabel>("factory_miner_upgrade_res2"),
                 upgrade_circles_block = findWidget<FlowGroup>("factory_miner_upgrade_res2_block"),
+                count = findWidget<VisLabel>("count_miner"),
             ),
         )
     }
+
+    // GG upgrades
+    private val ggTankDefenseRes2 by lazy { findWidget<VisLabel>("gg_upgrade_tank_defense_res2") }
+    private val ggTankDefenseRes3 by lazy { findWidget<VisLabel>("gg_upgrade_tank_defense_res3") }
+    private val ggArcherDefenseRes2 by lazy { findWidget<VisLabel>("gg_upgrade_archer_defense_res2") }
+    private val ggArcherDefenseRes3 by lazy { findWidget<VisLabel>("gg_upgrade_archer_defense_res3") }
+    private val ggArcherAttackRes2 by lazy { findWidget<VisLabel>("gg_upgrade_archer_attack_res2") }
+    private val ggArcherAttackRes3 by lazy { findWidget<VisLabel>("gg_upgrade_archer_attack_res3") }
+    private val ggMinerDefenseRes2 by lazy { findWidget<VisLabel>("gg_upgrade_miner_defense_res2") }
+    private val ggMinerDefenseRes3 by lazy { findWidget<VisLabel>("gg_upgrade_miner_defense_res3") }
+    private val ggMinerTripRes2 by lazy { findWidget<VisLabel>("gg_upgrade_miner_trip_res2") }
+    private val ggMinerTripRes3 by lazy { findWidget<VisLabel>("gg_upgrade_miner_trip_res3") }
 
     init {
         stage.actors {
@@ -339,43 +354,11 @@ class GameUi(
                 flowGroup(vertical = true) {
                     spacing = 160f
 
-                    visLabel("") { name = "count_tank_outside" }
-                    visLabel("") { name = "count_archer_outside" }
-                    visLabel("") { name = "count_miner_outside" }
+                    visLabel("") { name = "count_tank" }
+                    visLabel("") { name = "count_archer" }
+                    visLabel("") { name = "count_miner" }
                 }
             }
-
-//            flowGroup(vertical = false) {
-//                spacing = 40f
-//                x = 1160f
-//                y = 730f
-//
-//                visLabel("")
-//                flowGroup(vertical = true) {
-//                    spacing = 160f
-//
-//                    visLabel("") { name = "count_tank_outside" }
-//                    visLabel("") { name = "count_archer_outside" }
-//                    visLabel("") { name = "count_miner_outside" }
-//                }
-//            }
-
-//            flowGroup(vertical = true) {
-//                x = 860f
-//                y = 735f
-//
-//                visImageButton {
-//                    onClick { gameState.resettableState.onToggleDoorClicked() }
-//                    padLeft(22f)
-//                    padRight(22f)
-//                    padBottom(4f)
-//                    padTop(-4f)
-//
-//                    visLabel("") {
-//                        name = "gate"
-//                    }
-//                }
-//            }
 
             visTable {
                 x = 1432f
@@ -410,48 +393,113 @@ class GameUi(
                     x = 20f
                     y = 20f
 
-                    visLabel("Buy upgrades", style = "number")
+                    flowGroup {
+                        it.padTop(30f)
+                        visLabel("Buy ")
+                        visTable { visLabel("GG", style = "number") { it.pad(-20f, 0f, -3f, 0f) } }
+                        visLabel(" upgrades")
+                    }
                     row()
 
-                    flowGroup(vertical = true) {
-                        spacing = 35f
+                    visTable {
+                        visLabel(MinionType.Tank.name)
 
                         visImageButton {
                             onClick { gameState.onUpgradeDefence(MinionType.Tank) }
 
-                            visLabel(MinionType.Tank.name + " Defense +")
+                            flowGroup(vertical = false) {
+                                visLabel("Defense ↑")
+                                icon(IconSize.SMALL, AssetDescriptors.CIRCLE, 10f)
+                                visLabel("") { name = "gg_upgrade_tank_defense_res2" }
+                                icon(IconSize.SMALL, AssetDescriptors.PENTAGON, 10f)
+                                visLabel("") { name = "gg_upgrade_tank_defense_res3" }
+
+                                spacing = 3f
+                                it.pad(0f, 20f, 0f, 20f)
+                            }
+
+                            it.space(10f)
+                            it.fill()
                         }
 
-                        flowGroup {
-                            spacing = 20f
+                        row()
 
-                            visImageButton {
-                                onClick { gameState.onUpgradeDefence(MinionType.Archer) }
+                        visLabel(MinionType.Archer.name)
 
-                                visLabel(MinionType.Archer.name + " Defense +")
+                        visImageButton {
+                            onClick { gameState.onUpgradeDefence(MinionType.Archer) }
+
+                            flowGroup(vertical = false) {
+                                visLabel("Defense ↑")
+                                icon(IconSize.SMALL, AssetDescriptors.CIRCLE, 10f)
+                                visLabel("") { name = "gg_upgrade_archer_defense_res2" }
+                                icon(IconSize.SMALL, AssetDescriptors.PENTAGON, 10f)
+                                visLabel("") { name = "gg_upgrade_archer_defense_res3" }
+
+                                spacing = 3f
+                                it.pad(0f, 20f, 0f, 20f)
                             }
 
-                            visImageButton {
-                                onClick { gameState.onUpgradeBaseAttack(MinionType.Archer) }
-
-                                visLabel(MinionType.Archer.name + " Attack +")
-                            }
+                            it.space(10f)
+                            it.fill()
                         }
 
-                        flowGroup {
-                            spacing = 20f
+                        visImageButton {
+                            onClick { gameState.onUpgradeBaseAttack(MinionType.Archer) }
 
-                            visImageButton {
-                                onClick { gameState.onUpgradeDefence(MinionType.Miner) }
+                            flowGroup(vertical = false) {
+                                visLabel("Attack ↑")
+                                icon(IconSize.SMALL, AssetDescriptors.CIRCLE, 10f)
+                                visLabel("") { name = "gg_upgrade_archer_attack_res2" }
+                                icon(IconSize.SMALL, AssetDescriptors.PENTAGON, 10f)
+                                visLabel("") { name = "gg_upgrade_archer_attack_res3" }
 
-                                visLabel(MinionType.Miner.name + " Defense +")
+                                spacing = 3f
+                                it.pad(0f, 20f, 0f, 20f)
                             }
 
-                            visImageButton {
-                                onClick { gameState.onUpgradeRoundtrip() }
+                            it.space(10f)
+                            it.fill()
+                        }
 
-                                visLabel(MinionType.Miner.name + " Roundtrip +")
+                        row()
+
+                        visLabel(MinionType.Miner.name)
+
+                        visImageButton {
+                            onClick { gameState.onUpgradeDefence(MinionType.Miner) }
+
+                            flowGroup(vertical = false) {
+                                visLabel("Defense ↑")
+                                icon(IconSize.SMALL, AssetDescriptors.CIRCLE, 10f)
+                                visLabel("") { name = "gg_upgrade_miner_defense_res2" }
+                                icon(IconSize.SMALL, AssetDescriptors.PENTAGON, 10f)
+                                visLabel("") { name = "gg_upgrade_miner_defense_res3" }
+
+                                spacing = 3f
+                                it.pad(0f, 20f, 0f, 20f)
                             }
+
+                            it.space(10f)
+                            it.fill()
+                        }
+
+                        visImageButton {
+                            onClick { gameState.onUpgradeRoundTrip() }
+
+                            flowGroup(vertical = false) {
+                                visLabel("Round trip ↓")
+                                icon(IconSize.SMALL, AssetDescriptors.CIRCLE, 10f)
+                                visLabel("") { name = "gg_upgrade_miner_trip_res2" }
+                                icon(IconSize.SMALL, AssetDescriptors.PENTAGON, 10f)
+                                visLabel("") { name = "gg_upgrade_miner_trip_res3" }
+
+                                spacing = 3f
+                                it.pad(0f, 20f, 0f, 20f)
+                            }
+
+                            it.space(10f)
+                            it.fill()
                         }
                     }
                 }
@@ -482,8 +530,6 @@ class GameUi(
         bossHp?.setText("${gs.bossHp.current} / ${gs.bossHp.total}")
         bossLevel?.setText(gs.bossLevel)
 
-        gate?.setText((if (gs.doorIsOpen) "Close" else "Open") + " gate")
-
         mapOf(
             MinionType.Tank to gs.tankMinionData,
             MinionType.Archer to gs.archerMinionData,
@@ -498,12 +544,33 @@ class GameUi(
                 it?.upgrade_triangles?.setText(upgradeCost.triangles)
                 it?.upgrade_circles?.setText(upgradeCost.circles)
 
-                // TODO Find labels only once
-                findWidget<VisLabel>("count_${type.name.lowercase()}_inside")
-                    ?.setText(ceil(data.minionCountInside).toInt())
-                findWidget<VisLabel>("count_${type.name.lowercase()}_outside")
-                    ?.setText(ceil(data.minionCountOutside).toInt())
+                it?.count?.setText(ceil(data.minionCountOutside).toInt())
             }
+        }
+
+        gameState.getDefenseUpgradeCost(MinionType.Tank).also {
+            ggTankDefenseRes2?.setText(it.circles)
+            ggTankDefenseRes3?.setText(it.pentas)
+        }
+
+        gameState.getDefenseUpgradeCost(MinionType.Archer).also {
+            ggArcherDefenseRes2?.setText(it.circles)
+            ggArcherDefenseRes3?.setText(it.pentas)
+        }
+
+        gameState.getBaseAttackUpgradeCost(MinionType.Archer).also {
+            ggArcherAttackRes2?.setText(it.circles)
+            ggArcherAttackRes3?.setText(it.pentas)
+        }
+
+        gameState.getDefenseUpgradeCost(MinionType.Miner).also {
+            ggMinerDefenseRes2?.setText(it.circles)
+            ggMinerDefenseRes3?.setText(it.pentas)
+        }
+
+        gameState.getRoundTripUpgradeCost().also {
+            ggMinerTripRes2?.setText(it.circles)
+            ggMinerTripRes3?.setText(it.pentas)
         }
     }
 

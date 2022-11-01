@@ -17,51 +17,68 @@ class PersistentGameState {
         // TODO: animation?
         // TODO: sound?
         val pentas = resettableState.resourceInventory.pentas
+        val tankDefenseMultiplier = resettableState.tankMinionData.defenceMultiplier
+        // Unused, included for completeness
+        val tankAttackMultiplier = resettableState.tankMinionData.attackMultiplier
+        val archerDefenseMultiplier = resettableState.archerMinionData.defenceMultiplier
+        val archerAttackMultiplier = resettableState.archerMinionData.attackMultiplier
+        val minerDefenseMultiplier = resettableState.minerMinionData.defenceMultiplier
+        val roundTripShortening = resettableState.roundTripShortening
+
         resettableState = ResettableGameState()
         resettableState.resourceInventory.pentas = pentas
+        resettableState.tankMinionData.defenceMultiplier = tankDefenseMultiplier
+        resettableState.tankMinionData.attackMultiplier = tankAttackMultiplier
+        resettableState.archerMinionData.defenceMultiplier = archerDefenseMultiplier
+        resettableState.archerMinionData.attackMultiplier = archerAttackMultiplier
+        resettableState.minerMinionData.defenceMultiplier = minerDefenseMultiplier
+        resettableState.roundTripShortening = roundTripShortening
     }
 
-    fun getBaseAttackUpgradeCost(minionType: MinionType): ResourcePackage =
-        strengthUpgradeCost(
-            minionType,
-            resettableState[minionType].attackMultiplier,
-        )
-
-    fun canUpgradeBaseAttack(minionType: MinionType): Boolean =
-        resettableState.resourceInventory.contains(getBaseAttackUpgradeCost(minionType))
+    // ATTACK
 
     fun onUpgradeBaseAttack(minionType: MinionType) {
         if (canUpgradeBaseAttack(minionType)) {
+            resettableState.resourceInventory -= getBaseAttackUpgradeCost(minionType)
             resettableState[minionType].attackMultiplier *= 1.2f
-            resettableState.resourceInventory -= strengthUpgradeCost(
-                minionType,
-                resettableState[minionType].attackMultiplier,
-            )
         }
     }
+
+    fun canUpgradeBaseAttack(minionType: MinionType): Boolean =
+        getBaseAttackUpgradeCost(minionType) in resettableState.resourceInventory
+
+    fun getBaseAttackUpgradeCost(minionType: MinionType): ResourcePackage =
+        strengthUpgradeCost(resettableState[minionType].attackMultiplier)
+
+    // DEFENSE
 
     fun onUpgradeDefence(minionType: MinionType) {
-        if (resettableState.resourceInventory.contains(
-                strengthUpgradeCost(
-                    minionType,
-                    resettableState[minionType].defenceMultiplier,
-                ),
-            )
-        ) {
+        if (canUpgradeDefense(minionType)) {
+            resettableState.resourceInventory -= getDefenseUpgradeCost(minionType)
             resettableState[minionType].defenceMultiplier *= 1.2f
-            resettableState.resourceInventory -= strengthUpgradeCost(
-                minionType,
-                resettableState[minionType].defenceMultiplier,
-            )
         }
     }
 
-    fun onUpgradeRoundtrip() {
-        if (resettableState.resourceInventory.contains(roundtripUpgradeCost(resettableState.roundTripShortening))) {
+    fun canUpgradeDefense(minionType: MinionType): Boolean =
+        getDefenseUpgradeCost(minionType) in resettableState.resourceInventory
+
+    fun getDefenseUpgradeCost(minionType: MinionType): ResourcePackage =
+        strengthUpgradeCost(resettableState[minionType].defenceMultiplier)
+
+    // MINER ROUND-TRIP
+
+    fun onUpgradeRoundTrip() {
+        if (canUpgradeRoundTrip()) {
+            resettableState.resourceInventory -= getRoundTripUpgradeCost();
             resettableState.roundTripShortening *= 0.9f;
-            resettableState.resourceInventory -= roundtripUpgradeCost(resettableState.roundTripShortening);
         }
     }
+
+    fun canUpgradeRoundTrip() =
+        getRoundTripUpgradeCost() in resettableState.resourceInventory
+
+    fun getRoundTripUpgradeCost() =
+        roundtripUpgradeCost(resettableState.roundTripShortening)
 
     fun calculateFrame(delta: Float) {
         resettableState.calculateFrame(delta)

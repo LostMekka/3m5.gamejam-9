@@ -19,8 +19,7 @@ const val baseMinerRoundTripTime = 10f
 fun bossBaseDamage(bossLevel: Int): Float = 0.5f * 1.15f.pow(bossLevel - 1)
 fun bossHealth(bossLevel: Int): Int = 20 * 1.15f.pow(bossLevel - 1).toInt()
 fun bossLootCircles(bossLevel: Int) = (0.1f * bossLevel + 1).roundToInt()
-fun bossLootPentas(bossLevel: Int) = (0.2f * bossLevel).roundToInt()
-
+fun bossLootPentas(bossLevel: Int) = (0.1f * bossLevel).roundToInt()
 
 
 ////// FACTORY ////////////////////////////////
@@ -34,16 +33,16 @@ fun factoryUpgradeCost(minionType: MinionType, level: Int) =
         circles = (2 * 1.3.pow(level - 8)).roundToInt(),
     )
 
-fun strengthUpgradeCost(minionType: MinionType,level: Float) =
+fun strengthUpgradeCost(level: Float) =
     ResourcePackage(
-        triangles =0,
+        triangles = 0,
         pentas = (1 * 1.5.pow(level.toDouble())).roundToInt(),
         circles = (5 * 1.5.pow(level.toDouble())).roundToInt(),
     )
 
 fun roundtripUpgradeCost(level: Float) =
     ResourcePackage(
-        triangles =(1 * 1.2.pow(1/level.toDouble())).roundToInt(),
-        pentas = (2 * 1.2.pow(1/level.toDouble())).roundToInt(),
-        circles = (10 * 1.2.pow(1/level.toDouble())).roundToInt(),
+        triangles = (1 * 1.2.pow(1 / level.toDouble())).roundToInt(),
+        pentas = (2 * 1.2.pow(1 / level.toDouble())).roundToInt(),
+        circles = (10 * 1.2.pow(1 / level.toDouble())).roundToInt(),
     )
